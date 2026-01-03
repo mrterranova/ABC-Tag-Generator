@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryDropdown from "../components/dropdown";
 
+
 interface Book {
   id: string;
   title: string;
@@ -18,6 +19,7 @@ interface CardsProps {
 }
 
 const Cards: React.FC<CardsProps> = ({ book, onUpdateBook }) => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [category, setCategory] = useState(book.category ?? "");
@@ -28,8 +30,9 @@ const Cards: React.FC<CardsProps> = ({ book, onUpdateBook }) => {
   };
 
   const handleSaveCategory = async () => {
+    
     try {
-      const response = await fetch(`http://localhost:5000/books/${book.id}/category`, {
+      const response = await fetch(`${BASE_URL}/books/${book.id}/category`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ category }),

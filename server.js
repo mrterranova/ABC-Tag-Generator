@@ -138,9 +138,18 @@ app.patch("/books/:id/category", async (req, res) => {
   }
 });
 
+
+
 // ML Prediction Function
 async function predictWithML({ title, author, description }) {
-  const response = await fetch("http://127.0.0.1:5001/predict", {
+  // TODO: Remove this mock once 
+  if (process.env.NODE_ENV === "production") {
+    return {
+      genre: "Unknown",   // or some fallback
+      scores: [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    }
+  }
+  const response = await fetch(process.env.MACHINE_LEARNING_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

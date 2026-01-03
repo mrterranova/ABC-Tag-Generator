@@ -18,10 +18,11 @@ const Search: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [results, setResults] = useState<Book[]>([]);
   const [updateResults, setUpdateResults] = useState(false);
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   // Fetch books from backend
   useEffect(() => {
-    fetch("http://localhost:5000/books")
+    fetch(`${BASE_URL}/books`)
       .then((res) => res.json())
       .then((data) => {
         const parsedBooks = data.map((b: any) => ({

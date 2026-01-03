@@ -35,6 +35,7 @@ const BookFetcher: React.FC<BookFetcherProps> = ({
 }) => {
   const { description, fetchDescription, loading } = useBookDescription();
 
+
   useEffect(() => {
     if (description) {
       onDescriptionFetched(description);
@@ -97,7 +98,8 @@ const SimpleForm: React.FC<SimpleFormProps> = ({
       setAllBooks((prev) => [...prev, newBook]);
 
       // Post the results
-      const response = await fetch("http://localhost:5000/books", {
+      const BASE_URL = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${BASE_URL}/books`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newBook),
