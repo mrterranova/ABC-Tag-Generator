@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# ML models
+ml-api/roberta_model/
+*.safetensors
+*.bin
+ml-api/roberta_model/
+*.safetensors
