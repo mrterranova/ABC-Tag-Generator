@@ -1,11 +1,11 @@
 export const categoryLabels = [
-  "Art",
-  "Business/Finance",
-  "Fantasy/Science Fiction",
-  "Food",
-  "History",
-  "Religion/Spirituality",
-  "Romance",
-  "Science",
-  "Thriller"
+  "art",
+  "business/finance",
+  "fantasy/science fiction",
+  "food",
+  "history",
+  "religion/spirituality",
+  "romance",
+  "science",
+  "thriller"
 ];

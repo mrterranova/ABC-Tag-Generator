@@ -1,21 +1,20 @@
 {
   "name": "abc-generator-capstone",
   "version": "1.0.0",
+  "type": "module",
   "main": "db.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "concurrently \"npm run server\" \"npm run client\" \"npm run ml-model\"",
     "server": "nodemon server.js",
+    "ml-model": "cd ABC-Tag-Generator-ML-Model && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt",
     "client": "cd ABC-Tag-Generator-UI && npm run dev"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "body-parser": "^2.2.1",
     "cors": "^2.8.5",
     "express": "^5.2.1",
+    "node-fetch": "^3.3.2",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",
     "uuid": "^13.0.0"

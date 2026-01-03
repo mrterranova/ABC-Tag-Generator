@@ -94,7 +94,6 @@
   color: #555;
 }
 
-
 .parallax-layer {
   position: sticky;
   top: 0;
@@ -172,11 +171,15 @@ textarea {
   cursor: pointer;
 }
 .results-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 0px));
+  gap: 20px; /* space between cards */
+  justify-items: center; /* center the cards in their grid cell */
 }
+
 .book-result-card {
   text-align: center;
-  width: 20%;
+  width: 300px;
   background-color: white;
   margin: 30px;
   padding: 5px;
@@ -246,4 +249,40 @@ a.resource-link {
   text-align: center;
   color: steelblue;
 
+}
+
+.score-table-container {
+  margin-top: 20px;
+}
+
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  text-align: left;
+}
+
+.score-table th,
+.score-table td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+}
+
+.score-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.score-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.score-table tr:hover {
+  background-color: #f1f7ff;
+}
+.analysis-container{
+  margin: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #ddd;
 }

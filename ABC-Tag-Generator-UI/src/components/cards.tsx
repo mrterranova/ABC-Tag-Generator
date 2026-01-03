@@ -7,6 +7,7 @@ interface Book {
   title: string;
   author: string;
   category?: string;
+  mlCategory?: string;
   description?: string;
   mlScore?: number[];
 }
@@ -20,9 +21,10 @@ const Cards: React.FC<CardsProps> = ({ book, onUpdateBook }) => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [category, setCategory] = useState(book.category ?? "");
+  const [mlCategory, setMlCategory] = useState(book.mlCategory ?? "");
 
   const handleViewChart = () => {
-    navigate("/chart", { state: { title: book.title, author: book.author, scores: book.mlScore } });
+    navigate("/chart", { state: { title: book.title, author: book.author, scores: book.mlScore, description: book.description, category: category, mlCategory: mlCategory } });
   };
 
   const handleSaveCategory = async () => {
@@ -35,6 +37,7 @@ const Cards: React.FC<CardsProps> = ({ book, onUpdateBook }) => {
       if (!response.ok) throw new Error("Failed to update category");
       const updatedBook = await response.json();
       setCategory(updatedBook.usrCategory);
+      setMlCategory(updatedBook.mlCategory);
       setIsEditing(false);
 
       // **Update parent state immediately**

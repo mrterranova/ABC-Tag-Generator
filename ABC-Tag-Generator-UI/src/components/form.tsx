@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useBookDescription } from "../components/scraper";
 import Results from "../pages/Results";
+import { fetchMLCategory } from "../services/flask";
 
-
-// Props for the SimpleForm component
+// SimpleForm interface
 interface SimpleFormProps {
   title?: string;
   author?: string;
@@ -15,20 +15,19 @@ export interface Book {
   id: string;
   title: string;
   author: string;
-  category?: string;
+  mlCategory?: string;
+  usrCategory?: string;
+  category?: string; 
   description?: string;
   mlScore?: number[];
 }
 
-// Props for BookFetcher button component
 interface BookFetcherProps {
   title: string;
   author: string;
   onDescriptionFetched: (desc: string) => void;
 }
 
-
-// BookFetcher Component: fetches description using custom hook
 const BookFetcher: React.FC<BookFetcherProps> = ({
   title,
   author,
@@ -56,7 +55,6 @@ const BookFetcher: React.FC<BookFetcherProps> = ({
   );
 };
 
-// Main form component
 const SimpleForm: React.FC<SimpleFormProps> = ({
   title = "",
   author = "",
@@ -66,31 +64,43 @@ const SimpleForm: React.FC<SimpleFormProps> = ({
   const [bookAuthor, setBookAuthor] = useState(author);
   const [bookDescription, setBookDescription] = useState(description);
   const [allBooks, setAllBooks] = useState<Book[]>([]);
+  const [mlLoading, setMLLoading] = useState(false);
 
-  // Handle form submission and POST to backend
+  // Submit form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!bookTitle || !bookAuthor) return;
 
-    const newBook = {
-      id: crypto.randomUUID(),     // required
-      title: bookTitle,            // required
-      author: bookAuthor,          // required
-      mlCategory: "Art",           // required
-      usrCategory: "",             // optional
-      description: bookDescription || "",  // optional
-      mlScores: JSON.stringify([0.9,0.9,0.9,0.5,0.4,0.4,0.3,0.8,0.9]) // optional
-    };
-
-    // Add to local state immediately for UI
-    setAllBooks((prev) => [...prev, newBook]);
-
-    // POST to backend
     try {
+      // Fetch ML field
+      setMLLoading(true);
+      const {genre: mlCategory, scores} = await fetchMLCategory(
+        bookTitle,
+        bookAuthor,
+        bookDescription || ""
+      );
+
+      console.log("ML Prediction:", mlCategory, scores);
+      setMLLoading(false);
+
+      const newBook: Book = {
+        id: crypto.randomUUID(),
+        title: bookTitle,
+        author: bookAuthor,
+        mlCategory: mlCategory,
+        usrCategory: mlCategory, 
+        category: mlCategory,
+        description: bookDescription || "",
+        mlScore: scores,
+      };
+
+      setAllBooks((prev) => [...prev, newBook]);
+
+      // Post the results
       const response = await fetch("http://localhost:5000/books", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newBook)
+        body: JSON.stringify(newBook),
       });
 
       if (!response.ok) {
@@ -98,22 +108,29 @@ const SimpleForm: React.FC<SimpleFormProps> = ({
         console.error("Backend error:", error);
         alert("Failed to save book: " + error.message);
       } else {
-        console.log("Book saved to backend successfully!");
+        console.log("Book saved successfully!", mlCategory);
       }
-    } catch (err) {
-      console.error("Network error:", err);
-      alert("Failed to connect to backend.");
-    }
 
-    // Reset form fields
-    setBookTitle("");
-    setBookAuthor("");
-    setBookDescription("");
+      // Reset fields on post
+      setBookTitle("");
+      setBookAuthor("");
+      setBookDescription("");
+    } catch (err) {
+      setMLLoading(false);
+      console.error("Error during submission:", err);
+      alert("Something went wrong during submission.");
+    }
   };
 
-  function handleUpdateBook(book: Book): void {
-    throw new Error("Function not implemented.");
-  }
+  const handleUpdateBook = (updatedBook: Book): void => {
+    setAllBooks((prevBooks) =>
+      prevBooks.map((b) =>
+        b.id === updatedBook.id
+          ? { ...updatedBook, category: updatedBook.usrCategory || updatedBook.mlCategory }
+          : b
+      )
+    );
+  };
 
   return (
     <>
@@ -153,8 +170,8 @@ const SimpleForm: React.FC<SimpleFormProps> = ({
           onDescriptionFetched={setBookDescription}
         />
 
-        <button className="form-btn" type="submit">
-          Submit
+        <button className="form-btn" type="submit" disabled={mlLoading}>
+          {mlLoading ? "Predicting Category..." : "Submit"}
         </button>
       </form>
 
