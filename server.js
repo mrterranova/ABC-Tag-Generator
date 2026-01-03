@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { openDB } from "./db.js";
+import fetch from "node-fetch";
 
 const app = express();
 const PORT = 5000;
@@ -48,19 +49,47 @@ app.get("/books", async (req, res) => {
 });
 
 // POST
-// POST
 app.post("/books", async (req, res) => {
   try {
-    const db = await openDB(); // <-- get database connection
-    const { id, title, author, mlCategory, usrCategory, description, mlScores } = req.body;
+    const db = await openDB();
 
-    if (!id || !title || !author || !mlCategory) {
-      return res.status(400).json({ message: "id, title, author, and mlCategory are required" });
+    const {
+      id,
+      title,
+      author,
+      usrCategory,
+      description
+    } = req.body;
+
+    if (!id || !title || !author || !description) {
+      return res.status(400).json({
+        message: "id, title, author, and description are required"
+      });
     }
+
+    // 🔮 Call ML service
+    const mlResult = await predictWithML({
+      title,
+      author,
+      description
+    });
+
+    const mlCategory = mlResult.genre;
+    const mlScores = mlResult.scores
+      ? JSON.stringify(mlResult.scores)
+      : null;
 
     await db.run(
       `
-      INSERT INTO books (id, title, author, mlCategory, usrCategory, description, mlScore)
+      INSERT INTO books (
+        id,
+        title,
+        author,
+        mlCategory,
+        usrCategory,
+        description,
+        mlScore
+      )
       VALUES (?, ?, ?, ?, ?, ?, ?)
       `,
       id,
@@ -68,18 +97,20 @@ app.post("/books", async (req, res) => {
       author,
       mlCategory,
       usrCategory || null,
-      description || null,
-      mlScores || null
+      description,
+      mlScores
     );
 
-    res.status(201).json({ message: "Book added successfully!" });
+    res.status(201).json({
+      message: "Book added successfully",
+      mlCategory
+    });
+
   } catch (err) {
     console.error("Error inserting book:", err);
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: "Failed to add book" });
   }
 });
-
-
 
 // UPDATE
 app.patch("/books/:id/category", async (req, res) => {
@@ -106,6 +137,25 @@ app.patch("/books/:id/category", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+// ML Prediction Function
+async function predictWithML({ title, author, description }) {
+  const response = await fetch("http://127.0.0.1:5001/predict", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title,
+      authors: author,
+      description
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error("ML service error");
+  }
+
+  return response.json(); // { genre, scores? }
+}
 
 
 
