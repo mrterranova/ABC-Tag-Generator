@@ -2,17 +2,22 @@ import express from "express";
 import cors from "cors";
 import { openDB } from "./data/database.js";
 import fetch from "node-fetch";
+import { seed } from "./seed.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+await seed();
 
 // READ
 app.get("/books", async (req, res) => {
   try {
-    const db = await openDB();
+    const db = await openDB({
+      filename: "./data/database.db",
+      driver: sqlite3.Database
+    });
     const { title, author, category } = req.query;
 
     let sql = "SELECT * FROM books WHERE 1=1";
@@ -162,4 +167,8 @@ async function predictWithML({ title, author, description }) {
 
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
+});
+
+app.on("error", (err) => {
+  console.error("Server failed:", err);
 });
