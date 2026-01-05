@@ -140,7 +140,7 @@ app.patch("/books/:id/category", async (req, res) => {
 
 // ML Prediction Function
 async function predictWithML({ title, author, description }) {
-  const response = await fetch(process.env.REACT_APP_ML_API_URL, {
+  const response = await fetch(process.env.ML_API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -154,12 +154,12 @@ async function predictWithML({ title, author, description }) {
     throw new Error("ML service error");
   }
 
-  return response.json(); // { genre, scores? }
+  return response.json();
 }
 
 
 
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on ${PORT}`);
 });
