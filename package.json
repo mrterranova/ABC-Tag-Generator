@@ -4,12 +4,14 @@
   "type": "module",
   "main": "db.js",
   "scripts": {
+    "build": "npm install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "full": "concurrently \"npm run server\" \"npm run client\" \"npm run ml-model\"",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon server.js",
     "ml-model": "cd ABC-Tag-Generator-ML-Model && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt",
-    "client": "cd abc-tag-generator-ui && npm run start"
+    "client": "cd abc-tag-generator-ui && npm run start",
+    "seed": "node seed.js"
   },
   "dependencies": {
     "body-parser": "^2.2.1",
