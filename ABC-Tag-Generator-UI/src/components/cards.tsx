@@ -29,7 +29,7 @@ const Cards: React.FC<CardsProps> = ({ book, onUpdateBook }) => {
 
   const handleSaveCategory = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/books/${book.id}/category`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}books/${book.id}/category`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ category }),

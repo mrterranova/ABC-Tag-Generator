@@ -21,7 +21,7 @@ const Search: React.FC = () => {
 
   // Fetch books from backend
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/books`)
+    fetch(`${process.env.REACT_APP_API_URL}books`)
       .then(async (res) => {
         const contentType = res.headers.get("content-type");
         if (!contentType || !contentType.includes("application/json")) {
