@@ -140,7 +140,7 @@ app.patch("/books/:id/category", async (req, res) => {
 
 // ML Prediction Function
 async function predictWithML({ title, author, description }) {
-  const response = await fetch("http://127.0.0.1:5001/predict", {
+  const response = await fetch(process.env.REACT_APP_ML_API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

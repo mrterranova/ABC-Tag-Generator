@@ -4,7 +4,7 @@ import Homescreen from './pages/Homescreen';
 import Category from './pages/Category'; // import your form page
 import Search from './pages/Search';
 import Report from "./pages/Report";
-import Results from "./pages/Results";
+import NotFound from "./pages/NotFound";
 import Chart from "./pages/Chart";
 import NextSteps from "./pages/NextSteps";
 import Navigation from './components/navigation'
@@ -25,6 +25,7 @@ const AppRouter: React.FC = () => {
         <Route path="/report" element={<Report />} />
         <Route path="/chart" element={<Chart />} />
         <Route path="/next-steps" element={<NextSteps />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

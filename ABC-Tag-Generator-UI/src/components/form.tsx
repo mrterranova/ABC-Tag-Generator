@@ -97,7 +97,7 @@ const SimpleForm: React.FC<SimpleFormProps> = ({
       setAllBooks((prev) => [...prev, newBook]);
 
       // Post the results
-      const response = await fetch("http://localhost:5000/books", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/books`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newBook),

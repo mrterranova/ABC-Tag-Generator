@@ -21,7 +21,7 @@ const Search: React.FC = () => {
 
   // Fetch books from backend
   useEffect(() => {
-    fetch("http://localhost:5000/books")
+    fetch(`${process.env.REACT_APP_API_URL}/books`)
       .then((res) => res.json())
       .then((data) => {
         const parsedBooks = data.map((b: any) => ({
