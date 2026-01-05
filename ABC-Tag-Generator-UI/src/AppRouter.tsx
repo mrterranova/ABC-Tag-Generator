@@ -18,7 +18,6 @@ const AppRouter: React.FC = () => {
       <nav>
         <Navigation/>
       </nav>
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/form" element={<Category />} />
