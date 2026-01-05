@@ -18,6 +18,7 @@ interface ResultsProps {
 const Results: React.FC<ResultsProps> = ({ books, onUpdateBook }) => {
   return (
     <div className="results-container">
+      {books.length === 0 && <p>No results found.</p>}
       {books.map(book => (
         <Cards key={book.id} book={book} onUpdateBook={onUpdateBook} />
       ))}

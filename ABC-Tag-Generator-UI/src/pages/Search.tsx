@@ -22,12 +22,21 @@ const Search: React.FC = () => {
   // Fetch books from backend
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/books`)
-      .then((res) => res.json())
+      .then(async (res) => {
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          const text = await res.text();
+          console.error("Expected JSON but got:", text);
+          throw new Error("Invalid JSON response"); 
+        }
+        return res.json(); 
+      })
       .then((data) => {
+        if (!data) return;
         const parsedBooks = data.map((b: any) => ({
           ...b,
-          category: b.usrCategory, // map to user category
-          mlScore: b.mlScore
+          category: b.usrCategory, 
+          mlScore: Array.isArray(b.mlScore)
             ? b.mlScore.map((num: number) => (num < 0 ? 0 : num))
             : [],
         }));
@@ -36,6 +45,7 @@ const Search: React.FC = () => {
       })
       .catch((err) => console.error("Error fetching books:", err));
   }, []);
+  
 
   // Handle search form
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
