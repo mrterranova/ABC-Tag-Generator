@@ -1,8 +1,10 @@
 import torch
 import joblib
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import os
 
-model_path = "./roberta_model"
+model_path = "./final_model"
+
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModelForSequenceClassification.from_pretrained(model_path)
 model.eval()
