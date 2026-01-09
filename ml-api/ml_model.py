@@ -14,6 +14,8 @@ le = joblib.load("label_encoder.pkl")
 
 def predict_genre_with_scores(description, title="", authors=""):
     text = f"{title} by {authors}: {description}".strip()
+    print("Text for model:", text)
+
     inputs = tokenizer(
         text,
         return_tensors="pt",
@@ -21,12 +23,23 @@ def predict_genre_with_scores(description, title="", authors=""):
         padding="max_length",
         max_length=256
     )
+
+    # Make sure model is on CPU
+    device = torch.device("cpu")
+    model.to(device)
+    inputs = {k: v.to(device) for k, v in inputs.items()}
+
     with torch.no_grad():
         logits = model(**inputs).logits
-        # convert to list of probabilities
+        print("Logits from model:", logits)
+
         probs = torch.softmax(logits, dim=1).tolist()[0]
+        print("Softmax probs:", probs)
+
         pred_id = int(torch.argmax(logits, dim=1))
-    category = le.inverse_transform([pred_id])[0]
+        category = le.inverse_transform([pred_id])[0]
+        print("Predicted category:", category)
+
     return category, probs
 
 
