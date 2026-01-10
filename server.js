@@ -69,33 +69,43 @@ app.get("/books/:id", async (req, res) => {
 // POST
 app.post("/books", async (req, res) => {
   const db = await openDB();
+
   try {
     const { id, title, author, usrCategory, description } = req.body;
 
     if (!id || !title || !author || !description) {
-      return res.status(400).json({ message: "id, title, author, and description are required" });
+      return res.status(400).json({
+        message: "id, title, author, and description are required"
+      });
     }
 
-    // Default values
+    // Ensure 'mlScore' column exists
+    const columns = await db.all(`PRAGMA table_info(books)`);
+    if (!columns.find(col => col.name === "mlScore")) {
+      await db.run(`ALTER TABLE books ADD COLUMN mlScore TEXT`);
+      console.log("Added missing 'mlScore' column to books table.");
+    }
+
+    // Default ML values
     let mlCategory = "Unknown";
-    let mlScores = "[]"; // always a JSON array string
+    let mlScores = "[]";
 
     // Call ML service
     try {
       const mlResult = await predictWithML({ title, author, description });
 
-      // Use scores only if returned properly
       mlCategory = mlResult.genre || "Unknown";
       mlScores = Array.isArray(mlResult.scores) ? JSON.stringify(mlResult.scores) : "[]";
     } catch (mlErr) {
       console.error("ML prediction failed:", mlErr);
-      // Keep mlCategory = "Unknown" and mlScores = "[]"
+      // Keep defaults
     }
 
     // Insert into SQLite
     try {
       await db.run(
-        `INSERT INTO books (id, title, author, mlCategory, usrCategory, description, mlScore)
+        `INSERT INTO books 
+         (id, title, author, mlCategory, usrCategory, description, mlScore)
          VALUES (?, ?, ?, ?, ?, ?, ?)`,
         id, title, author, mlCategory, usrCategory || null, description, mlScores
       );
@@ -104,14 +114,12 @@ app.post("/books", async (req, res) => {
       return res.status(500).json({ message: "Database insert failed", error: dbErr.message });
     }
 
-    // Success
     res.status(200).json({ message: "Book added successfully", mlCategory, mlScores });
   } catch (err) {
     console.error("Unexpected error adding book:", err);
     res.status(500).json({ message: "Unexpected server error", error: err.message });
   }
 });
-
 
 
 // UPDATE
@@ -134,70 +142,33 @@ app.patch("/books/:id/category", async (req, res) => {
 });
 
 // ML prediction
-// async function predictWithML({ title, author, description }) {
-//   const mlApiUrl = process.env.ML_API_URL || "http://127.0.0.1:5001/predict";
-
-//   const response = await fetch(mlApiUrl, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({ title, authors: author, description }),
-//   });
-
-//   const data = await response.json();
-//   return data;
-// }
-
-// ML prediction with logs
 async function predictWithML({ title, author, description }) {
-  const baseUrl = "https://mterranova-roberta-book-genre-api.hf.space";
-  console.log("Sending request to ML API:", { title, author, description });
+  const baseUrl =
+    "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio";
 
-  try {
-    // Step 1: POST to get event_id
-    const postRes = await fetch(`${baseUrl}/gradio_api/call/predict_gradio`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: [title, author, description] }),
-    });
+  // STEP 1: POST to start prediction
+  const startResponse = await fetch(baseUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      data: [title, author, description],
+    }),
+  });
 
-    const postData = await postRes.json();
-    console.log("POST response:", postData);
+  const startData = await startResponse.json();
 
-    if (!postData.event_id) throw new Error("No event_id returned from ML API");
-
-    const eventId = postData.event_id;
-
-    // Step 2: Poll for prediction result
-    let attempts = 0;
-    const maxAttempts = 10;
-    const waitMs = 1000;
-    while (attempts < maxAttempts) {
-      attempts++;
-      const getRes = await fetch(`${baseUrl}/gradio_api/call/predict_gradio/${eventId}`);
-      const text = await getRes.text();
-
-      try {
-        const data = JSON.parse(text);
-        if (data?.data?.length === 2) {
-          const [genre, scores] = data.data;
-          console.log("Prediction received:", { genre, scores });
-          return { genre, scores };
-        }
-      } catch {
-        console.log(`Attempt ${attempts}: prediction not ready yet, retrying in ${waitMs}ms...`);
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, waitMs));
-    }
-
-    console.warn("ML API did not return prediction in time");
-    return { genre: "Unknown", scores: [] };
-  } catch (err) {
-    console.error("ML prediction failed:", err);
-    return { genre: "Unknown", scores: [] };
+  if (!startData.event_id) {
+    throw new Error("No event_id returned from ML API");
   }
-}
 
+  const eventId = startData.event_id;
+
+  // STEP 2: GET prediction result
+  const resultResponse = await fetch(`${baseUrl}/${eventId}`);
+  const resultData = await resultResponse.json();
+
+  return resultData;
+}
 
 
 // Start server
