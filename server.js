@@ -142,11 +142,27 @@ app.patch("/books/:id/category", async (req, res) => {
 });
 
 // ML prediction
+// async function predictWithML({ title, author, description }) {
+//   const mlApiUrl = process.env.ML_API_URL || "http://127.0.0.1:7860/predict";
+
+//   const response = await fetch(mlApiUrl, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({ title, authors: author, description }),
+//   });
+
+//   const data = await response.json();
+//   return data;
+// }
+
+// ML prediction (Gradio API) with logs
 async function predictWithML({ title, author, description }) {
   const baseUrl =
     "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio";
 
-  // STEP 1: POST to start prediction
+  console.log("[ML] Starting prediction for:", { title, author });
+
+  // STEP 1: Start prediction
   const startResponse = await fetch(baseUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -155,19 +171,41 @@ async function predictWithML({ title, author, description }) {
     }),
   });
 
-  const startData = await startResponse.json();
-
-  if (!startData.event_id) {
-    throw new Error("No event_id returned from ML API");
+  if (!startResponse.ok) {
+    throw new Error(`[ML] Failed to start ML prediction: ${startResponse.status}`);
   }
 
-  const eventId = startData.event_id;
+  const { event_id } = await startResponse.json();
+  console.log("[ML] Received event_id:", event_id);
 
-  // STEP 2: GET prediction result
-  const resultResponse = await fetch(`${baseUrl}/${eventId}`);
-  const resultData = await resultResponse.json();
+  if (!event_id) {
+    throw new Error("[ML] No event_id returned from ML API");
+  }
 
-  return resultData;
+  // STEP 2: Poll until prediction is ready
+  const resultUrl = `${baseUrl}/${event_id}`;
+  let resultData;
+
+  for (let i = 0; i < 10; i++) {
+    console.log(`[ML] Polling attempt ${i + 1} for event_id ${event_id}...`);
+    const res = await fetch(resultUrl);
+    resultData = await res.json();
+
+    if (resultData.is_generating === false) {
+      console.log("[ML] Prediction complete!");
+      break;
+    }
+
+    console.log("[ML] Prediction still generating, waiting 300ms...");
+    await new Promise(resolve => setTimeout(resolve, 300));
+  }
+
+  if (!resultData || !resultData.data) {
+    throw new Error("[ML] Prediction did not return data");
+  }
+
+  console.log("[ML] Final prediction result:", resultData.data[0]);
+  return resultData.data[0];
 }
 
 
