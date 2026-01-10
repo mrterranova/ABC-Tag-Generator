@@ -203,6 +203,67 @@ async function predictWithML({ title, author, description }) {
       console.log(`[ML] Generating... ${progress}%`);
     } else {
       prediction = parsed;
+      console.log(// ML prediction (Gradio API) with proper SSE parsing
+async function predictWithML({ title, author, description }) {
+  const baseUrl =
+    "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio";
+
+  console.log("[ML] Starting prediction for:", { title, author });
+
+  // STEP 1: Start prediction
+  const startResponse = await fetch(baseUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data: [title, author, description] }),
+  });
+
+  if (!startResponse.ok) throw new Error("[ML] Failed to start prediction");
+
+  const { event_id } = await startResponse.json();
+  console.log("[ML] Received event_id:", event_id);
+
+  const resultUrl = `${baseUrl}/${event_id}`;
+  let prediction;
+
+  // STEP 2: Poll until the prediction is finished
+  for (let i = 0; i < 20; i++) { // max 20 polls
+    console.log(`[ML] Polling attempt ${i + 1} for event_id ${event_id}...`);
+    const res = await fetch(resultUrl);
+
+    const text = await res.text(); // <-- IMPORTANT: read as text
+    const lines = text.split("\n");
+    const dataLines = lines.filter(line => line.startsWith("data: "));
+
+    if (dataLines.length === 0) {
+      console.log("[ML] No data yet, retrying...");
+      await new Promise(r => setTimeout(r, 300));
+      continue;
+    }
+
+    // Parse the last 'data:' line
+    const lastDataLine = dataLines[dataLines.length - 1].replace(/^data: /, "");
+    const parsed = JSON.parse(lastDataLine);
+
+    if (parsed.is_generating) {
+      const progress = parsed.progress ? (parsed.progress * 100).toFixed(1) : "0";
+      console.log(`[ML] Generating... ${progress}%`);
+    } else {
+      prediction = parsed;
+      console.log("[ML] Prediction complete!", prediction);
+      break;
+    }
+
+    await new Promise(r => setTimeout(r, 300));
+  }
+
+  if (!prediction || !prediction.data || prediction.data.length === 0) {
+    throw new Error("[ML] Prediction did not return valid data");
+  }
+
+  console.log("[ML] Final prediction result:", prediction.data[0]);
+  return prediction.data[0];
+}
+)
       console.log("[ML] Prediction complete!");
       break;
     }
