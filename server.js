@@ -157,6 +157,7 @@ app.patch("/books/:id/category", async (req, res) => {
 
 // ML prediction (Gradio API) with logs
 // ML prediction (Gradio API) with streaming logs
+// ML prediction (Gradio API) with proper SSE parsing
 async function predictWithML({ title, author, description }) {
   const baseUrl =
     "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio";
@@ -176,14 +177,14 @@ async function predictWithML({ title, author, description }) {
   console.log("[ML] Received event_id:", event_id);
 
   const resultUrl = `${baseUrl}/${event_id}`;
+  let prediction;
 
   // STEP 2: Poll until the prediction is finished
-  let prediction;
   for (let i = 0; i < 20; i++) { // max 20 polls
+    console.log(`[ML] Polling attempt ${i + 1} for event_id ${event_id}...`);
     const res = await fetch(resultUrl);
-    const text = await res.text();
 
-    // Split lines and parse 'data:' lines
+    const text = await res.text(); // <-- IMPORTANT: read as text
     const lines = text.split("\n");
     const dataLines = lines.filter(line => line.startsWith("data: "));
 
@@ -193,6 +194,7 @@ async function predictWithML({ title, author, description }) {
       continue;
     }
 
+    // Parse the last 'data:' line
     const lastDataLine = dataLines[dataLines.length - 1].replace(/^data: /, "");
     const parsed = JSON.parse(lastDataLine);
 
@@ -205,7 +207,6 @@ async function predictWithML({ title, author, description }) {
       break;
     }
 
-    // wait a bit before next poll
     await new Promise(r => setTimeout(r, 300));
   }
 
@@ -216,6 +217,7 @@ async function predictWithML({ title, author, description }) {
   console.log("[ML] Final prediction result:", prediction.data[0]);
   return prediction.data[0];
 }
+
 
 
 // Start server
