@@ -149,56 +149,55 @@ app.patch("/books/:id/category", async (req, res) => {
 
 // ML prediction with logs
 async function predictWithML({ title, author, description }) {
-  const baseUrl = process.env.ML_API_URL || "https://mterranova-roberta-book-genre-api.hf.space";
-  console.log("ML API Base URL:", baseUrl);
-  try {
-    console.log("Sending request to ML API:", { title, author, description });
+  const baseUrl = "https://mterranova-roberta-book-genre-api.hf.space";
+  console.log("Sending request to ML API:", { title, author, description });
 
+  try {
     // Step 1: POST to get event_id
-    const postResponse = await fetch(`${baseUrl}/gradio_api/call/predict_gradio`, {
+    const postRes = await fetch(`${baseUrl}/gradio_api/call/predict_gradio`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ data: [title, author, description] }),
     });
 
-    const postData = await postResponse.json();
-    console.log("POST response from ML API:", postData);
+    const postData = await postRes.json();
+    console.log("POST response:", postData);
 
     if (!postData.event_id) throw new Error("No event_id returned from ML API");
+
     const eventId = postData.event_id;
 
-    // Step 2: GET the result (retry until ready)
+    // Step 2: Poll for prediction result
     let attempts = 0;
-    let maxAttempts = 10;
-    let waitTime = 1000; // ms
-    let genre = "Unknown";
-    let scores = [];
-
+    const maxAttempts = 10;
+    const waitMs = 1000;
     while (attempts < maxAttempts) {
       attempts++;
-      const getResponse = await fetch(`${baseUrl}/gradio_api/call/predict_gradio/${eventId}`);
-      const text = await getResponse.text();
+      const getRes = await fetch(`${baseUrl}/gradio_api/call/predict_gradio/${eventId}`);
+      const text = await getRes.text();
 
       try {
-        const eventData = JSON.parse(text);
-        if (eventData?.data?.length === 2) {
-          [genre, scores] = eventData.data;
+        const data = JSON.parse(text);
+        if (data?.data?.length === 2) {
+          const [genre, scores] = data.data;
           console.log("Prediction received:", { genre, scores });
-          break;
+          return { genre, scores };
         }
       } catch {
-        console.log(`Attempt ${attempts}: Prediction not ready yet, retrying in ${waitTime}ms...`);
+        console.log(`Attempt ${attempts}: prediction not ready yet, retrying in ${waitMs}ms...`);
       }
 
-      await new Promise((resolve) => setTimeout(resolve, waitTime));
+      await new Promise((resolve) => setTimeout(resolve, waitMs));
     }
 
-    return { genre, scores };
+    console.warn("ML API did not return prediction in time");
+    return { genre: "Unknown", scores: [] };
   } catch (err) {
     console.error("ML prediction failed:", err);
     return { genre: "Unknown", scores: [] };
   }
 }
+
 
 
 // Start server
