@@ -1,36 +1,39 @@
+import os
+import tarfile
+import boto3
 import torch
 import joblib
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
-import os
-import boto3
-import tarfile
 
-S3_BUCKET = "my-abc-ml-capstone-model-bucket"
-S3_TARBALL_KEY = "model.tar.gz"
-LOCAL_MODEL_DIR = "final_model"
-LOCAL_TARBALL = "model.tar.gz"
+# Environment variables from Render
+BUCKET = os.environ["S3_BUCKET"]
+KEY = os.environ["S3_TARBALL_KEY"]
 
-if not os.path.exists(LOCAL_MODEL_DIR):
-    print("Downloading model tarball from S3...")
-    s3 = boto3.client("s3")
-    s3.download_file(S3_BUCKET, S3_TARBALL_KEY, LOCAL_TARBALL)
+# Download and extract tarball
+if not os.path.exists("model"):
+    os.makedirs("model")
 
-    print("Extracting tarball...")
-    with tarfile.open(LOCAL_TARBALL, "r:gz") as tar:
-        tar.extractall(LOCAL_MODEL_DIR)
-    print("Model ready!")
+s3 = boto3.client("s3")
+tar_path = "model/model.tar.gz"
+s3.download_file(BUCKET, KEY, tar_path)
 
-tokenizer = AutoTokenizer.from_pretrained(LOCAL_MODEL_DIR)
-model = AutoModelForSequenceClassification.from_pretrained(LOCAL_MODEL_DIR)
+with tarfile.open(tar_path, "r:gz") as tar:
+    tar.extractall(path="model")
+
+MODEL_PATH = "model/final_model"  # folder inside tarball
+LABEL_ENCODER_PATH = "model/label_encoder.pkl"
+
+# Load tokenizer and model
+tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
+model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
 model.eval()
 
 # Load label encoder
-le = joblib.load(os.path.join(LOCAL_MODEL_DIR, "label_encoder.pkl"))
+le = joblib.load(LABEL_ENCODER_PATH)
 
 
 def predict_genre_with_scores(description, title="", authors=""):
     text = f"{title} by {authors}: {description}".strip()
-
     inputs = tokenizer(
         text,
         return_tensors="pt",

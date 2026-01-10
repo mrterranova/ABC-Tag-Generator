@@ -4,3 +4,4 @@ torch
 transformers
 boto3
 joblib
+scikit-learn
