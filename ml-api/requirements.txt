@@ -3,5 +3,5 @@ flask-cors
 torch
 transformers
 boto3
-joblib
 scikit-learn
+joblib
