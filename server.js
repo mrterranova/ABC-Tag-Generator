@@ -150,7 +150,7 @@ app.patch("/books/:id/category", async (req, res) => {
 // ML prediction with logs
 async function predictWithML({ title, author, description }) {
   const baseUrl = process.env.ML_API_URL || "https://mterranova-roberta-book-genre-api.hf.space";
-
+  console.log("ML API Base URL:", baseUrl);
   try {
     console.log("Sending request to ML API:", { title, author, description });
 
@@ -167,19 +167,31 @@ async function predictWithML({ title, author, description }) {
     if (!postData.event_id) throw new Error("No event_id returned from ML API");
     const eventId = postData.event_id;
 
-    // Step 2: GET the result
-    console.log("Fetching ML prediction with event_id:", eventId);
-    const getResponse = await fetch(`${baseUrl}/gradio_api/call/predict_gradio/${eventId}`);
-    const eventData = await getResponse.json();
+    // Step 2: GET the result (retry until ready)
+    let attempts = 0;
+    let maxAttempts = 10;
+    let waitTime = 1000; // ms
+    let genre = "Unknown";
+    let scores = [];
 
-    console.log("GET response from ML API:", eventData);
+    while (attempts < maxAttempts) {
+      attempts++;
+      const getResponse = await fetch(`${baseUrl}/gradio_api/call/predict_gradio/${eventId}`);
+      const text = await getResponse.text();
 
-    if (!eventData.data || eventData.data.length !== 2)
-      throw new Error("Unexpected ML API response format");
+      try {
+        const eventData = JSON.parse(text);
+        if (eventData?.data?.length === 2) {
+          [genre, scores] = eventData.data;
+          console.log("Prediction received:", { genre, scores });
+          break;
+        }
+      } catch {
+        console.log(`Attempt ${attempts}: Prediction not ready yet, retrying in ${waitTime}ms...`);
+      }
 
-    const [genre, scores] = eventData.data;
-
-    console.log("Prediction result:", { genre, scores });
+      await new Promise((resolve) => setTimeout(resolve, waitTime));
+    }
 
     return { genre, scores };
   } catch (err) {
