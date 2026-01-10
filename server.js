@@ -147,30 +147,45 @@ app.patch("/books/:id/category", async (req, res) => {
 //   return data;
 // }
 
+// ML prediction with logs
 async function predictWithML({ title, author, description }) {
   const baseUrl = process.env.ML_API_URL || "https://mterranova-roberta-book-genre-api.hf.space";
 
-  // Send request and return event_id
-  const postResponse = await fetch(`${baseUrl}/gradio_api/call/predict_gradio`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ data: [title, author, description] }),
-  });
+  try {
+    console.log("Sending request to ML API:", { title, author, description });
 
-  const postData = await postResponse.json();
-  if (!postData.event_id) throw new Error("No event_id returned from ML API");
+    // Step 1: POST to get event_id
+    const postResponse = await fetch(`${baseUrl}/gradio_api/call/predict_gradio`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: [title, author, description] }),
+    });
 
-  const eventId = postData.event_id;
+    const postData = await postResponse.json();
+    console.log("POST response from ML API:", postData);
 
-  // Send event_id and return results
-  const getResponse = await fetch(`${baseUrl}/gradio_api/call/predict_gradio/${eventId}`);
-  const eventData = await getResponse.json();
+    if (!postData.event_id) throw new Error("No event_id returned from ML API");
+    const eventId = postData.event_id;
 
-  if (!eventData.data || eventData.data.length !== 2)
-    throw new Error("Unexpected ML API response format");
+    // Step 2: GET the result
+    console.log("Fetching ML prediction with event_id:", eventId);
+    const getResponse = await fetch(`${baseUrl}/gradio_api/call/predict_gradio/${eventId}`);
+    const eventData = await getResponse.json();
 
-  const [genre, scores] = eventData.data;
-  return { genre, scores };
+    console.log("GET response from ML API:", eventData);
+
+    if (!eventData.data || eventData.data.length !== 2)
+      throw new Error("Unexpected ML API response format");
+
+    const [genre, scores] = eventData.data;
+
+    console.log("Prediction result:", { genre, scores });
+
+    return { genre, scores };
+  } catch (err) {
+    console.error("ML prediction failed:", err);
+    return { genre: "Unknown", scores: [] };
+  }
 }
 
 
