@@ -156,6 +156,7 @@ app.patch("/books/:id/category", async (req, res) => {
 // }
 
 // ML prediction (Gradio API) with logs
+// ML prediction (Gradio API) with streaming logs
 async function predictWithML({ title, author, description }) {
   const baseUrl =
     "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio";
@@ -166,47 +167,54 @@ async function predictWithML({ title, author, description }) {
   const startResponse = await fetch(baseUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      data: [title, author, description],
-    }),
+    body: JSON.stringify({ data: [title, author, description] }),
   });
 
-  if (!startResponse.ok) {
-    throw new Error(`[ML] Failed to start ML prediction: ${startResponse.status}`);
-  }
+  if (!startResponse.ok) throw new Error("[ML] Failed to start prediction");
 
   const { event_id } = await startResponse.json();
   console.log("[ML] Received event_id:", event_id);
 
-  if (!event_id) {
-    throw new Error("[ML] No event_id returned from ML API");
-  }
-
-  // STEP 2: Poll until prediction is ready
   const resultUrl = `${baseUrl}/${event_id}`;
-  let resultData;
 
-  for (let i = 0; i < 10; i++) {
-    console.log(`[ML] Polling attempt ${i + 1} for event_id ${event_id}...`);
+  // STEP 2: Poll until the prediction is finished
+  let prediction;
+  for (let i = 0; i < 20; i++) { // max 20 polls
     const res = await fetch(resultUrl);
-    console.log(JSON.stringify(res))
-    resultData = await res.json();
+    const text = await res.text();
 
-    if (resultData.is_generating === false) {
+    // Split lines and parse 'data:' lines
+    const lines = text.split("\n");
+    const dataLines = lines.filter(line => line.startsWith("data: "));
+
+    if (dataLines.length === 0) {
+      console.log("[ML] No data yet, retrying...");
+      await new Promise(r => setTimeout(r, 300));
+      continue;
+    }
+
+    const lastDataLine = dataLines[dataLines.length - 1].replace(/^data: /, "");
+    const parsed = JSON.parse(lastDataLine);
+
+    if (parsed.is_generating) {
+      const progress = parsed.progress ? (parsed.progress * 100).toFixed(1) : "0";
+      console.log(`[ML] Generating... ${progress}%`);
+    } else {
+      prediction = parsed;
       console.log("[ML] Prediction complete!");
       break;
     }
 
-    console.log("[ML] Prediction still generating, waiting 300ms...");
-    await new Promise(resolve => setTimeout(resolve, 300));
+    // wait a bit before next poll
+    await new Promise(r => setTimeout(r, 300));
   }
 
-  if (!resultData || !resultData.data) {
-    throw new Error("[ML] Prediction did not return data");
+  if (!prediction || !prediction.data || prediction.data.length === 0) {
+    throw new Error("[ML] Prediction did not return valid data");
   }
 
-  console.log("[ML] Final prediction result:", resultData.data[0]);
-  return resultData.data[0];
+  console.log("[ML] Final prediction result:", prediction.data[0]);
+  return prediction.data[0];
 }
 
 
