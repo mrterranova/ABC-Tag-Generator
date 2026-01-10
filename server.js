@@ -189,6 +189,7 @@ async function predictWithML({ title, author, description }) {
   for (let i = 0; i < 10; i++) {
     console.log(`[ML] Polling attempt ${i + 1} for event_id ${event_id}...`);
     const res = await fetch(resultUrl);
+    console.log(JSON.stringify(res))
     resultData = await res.json();
 
     if (resultData.is_generating === false) {
