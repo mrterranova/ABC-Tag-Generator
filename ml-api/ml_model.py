@@ -2,19 +2,34 @@ import torch
 import joblib
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import os
+import boto3
+import tarfile
 
-model_path = "./final_model"
+S3_BUCKET = "my-abc-ml-capstone-model-bucket"
+S3_TARBALL_KEY = "model.tar.gz"
+LOCAL_MODEL_DIR = "final_model"
+LOCAL_TARBALL = "model.tar.gz"
 
-tokenizer = AutoTokenizer.from_pretrained(model_path)
-model = AutoModelForSequenceClassification.from_pretrained(model_path)
+if not os.path.exists(LOCAL_MODEL_DIR):
+    print("Downloading model tarball from S3...")
+    s3 = boto3.client("s3")
+    s3.download_file(S3_BUCKET, S3_TARBALL_KEY, LOCAL_TARBALL)
+
+    print("Extracting tarball...")
+    with tarfile.open(LOCAL_TARBALL, "r:gz") as tar:
+        tar.extractall(LOCAL_MODEL_DIR)
+    print("Model ready!")
+
+tokenizer = AutoTokenizer.from_pretrained(LOCAL_MODEL_DIR)
+model = AutoModelForSequenceClassification.from_pretrained(LOCAL_MODEL_DIR)
 model.eval()
 
-le = joblib.load("label_encoder.pkl")
+# Load label encoder
+le = joblib.load(os.path.join(LOCAL_MODEL_DIR, "label_encoder.pkl"))
 
 
 def predict_genre_with_scores(description, title="", authors=""):
     text = f"{title} by {authors}: {description}".strip()
-    print("Text for model:", text)
 
     inputs = tokenizer(
         text,
@@ -24,25 +39,14 @@ def predict_genre_with_scores(description, title="", authors=""):
         max_length=256
     )
 
-    # Make sure model is on CPU
     device = torch.device("cpu")
     model.to(device)
     inputs = {k: v.to(device) for k, v in inputs.items()}
 
     with torch.no_grad():
         logits = model(**inputs).logits
-        print("Logits from model:", logits)
-
         probs = torch.softmax(logits, dim=1).tolist()[0]
-        print("Softmax probs:", probs)
-
         pred_id = int(torch.argmax(logits, dim=1))
         category = le.inverse_transform([pred_id])[0]
-        print("Predicted category:", category)
 
     return category, probs
-
-
-def predict_genre(description, title="", authors=""):
-    category, _ = predict_genre_with_scores(description, title, authors)
-    return category

@@ -13,27 +13,20 @@ def predict():
     authors = data.get("authors", "")
     description = data.get("description", "")
 
+    if not description:
+        return jsonify({"genre": "Unknown", "scores": []})
+
     try:
-        # Run prediction
         category, probs = predict_genre_with_scores(
             description, title, authors)
-
-        # Ensure probs is a list of numbers
-        if not isinstance(probs, list):
-            probs = []
-
         return jsonify({
             "genre": category or "Unknown",
-            "scores": probs  # <-- key must match frontend/backend
+            "scores": probs
         })
     except Exception as e:
         print("ML prediction failed:", e)
-        # Return fallback values if prediction fails
-        return jsonify({
-            "genre": "Unknown",
-            "scores": []
-        })
+        return jsonify({"genre": "Unknown", "scores": []})
 
 
 if __name__ == "__main__":
-    app.run(port=5001)
+    app.run(host="0.0.0.0", port=7860)
