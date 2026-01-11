@@ -87,13 +87,13 @@ app.post("/books", async (req, res) => {
     }
 
     let mlCategory = "Unknown";
-    let mlScores = [];
+    let mlScore = []; // <- use mlScore everywhere
 
     // Call ML (server-side only)
     try {
       const mlResult = await predictWithML({ title, author, description });
-      mlCategory = mlResult.genre;
-      mlScores = mlResult.scores;
+      mlCategory = mlResult.genre || "Unknown";
+      mlScore = Array.isArray(mlResult.mlScore) ? mlResult.mlScore.flat().map(n => Number(n) || 0) : [];
     } catch (mlErr) {
       console.error("ML prediction failed:", mlErr);
     }
@@ -108,18 +108,18 @@ app.post("/books", async (req, res) => {
       mlCategory,
       usrCategory || null,
       description,
-      JSON.stringify(mlScores)
+      JSON.stringify(mlScore)
     );
 
     res.status(200).json({
       message: "Book added successfully",
-      id, 
+      id,
       title,
       author,
       mlCategory,
       usrCategory,
       description,
-      mlScores
+      mlScore
     });
   } catch (err) {
     console.error("Unexpected error adding book:", err);
@@ -164,7 +164,7 @@ app.patch("/books/:id/category", async (req, res) => {
 //   return data;
 // }
 
-// ML prediction 
+// ML prediction
 async function predictWithML({ title, author, description }) {
   const baseUrl =
     "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio";
@@ -192,28 +192,23 @@ async function predictWithML({ title, author, description }) {
   const text = await resultResponse.text();
 
   // Extract the line starting with "data:"
-  const dataLine = text
-    .split("\n")
-    .find(line => line.startsWith("data: "));
+  const dataLine = text.split("\n").find(line => line.startsWith("data: "));
 
   if (!dataLine) {
     throw new Error("[ML] No data line found in response");
   }
 
   // Parse the JSON array after "data: "
-  const [label, probabilities] = JSON.parse(
-    dataLine.replace("data: ", "")
-  );
+  const [label, probabilities] = JSON.parse(dataLine.replace("data: ", ""));
 
   console.log("[ML] Predicted label:", label);
   console.log("[ML] Class probabilities:", probabilities);
 
   return {
     genre: label,
-    mlScores: probabilities
+    mlScore: Array.isArray(probabilities) ? probabilities.flat().map(n => Number(n) || 0) : []
   };
 }
-
 
 
 // Start server
