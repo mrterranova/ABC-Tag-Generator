@@ -108,7 +108,7 @@ app.post("/books", async (req, res) => {
       mlCategory,
       usrCategory || null,
       description,
-      JSON.stringify(mlScores)
+      JSON.stringify(mlScore)
     );
 
     res.status(200).json({
@@ -119,7 +119,7 @@ app.post("/books", async (req, res) => {
       mlCategory,
       usrCategory,
       description,
-      mlScores
+      mlScore
     });
   } catch (err) {
     console.error("Unexpected error adding book:", err);
@@ -164,10 +164,7 @@ app.patch("/books/:id/category", async (req, res) => {
 //   return data;
 // }
 
-// ML prediction (Gradio API) with logs
-// ML prediction (Gradio API) with streaming logs
-// ML prediction (Gradio API) with proper SSE parsing
-// ML prediction (Gradio API – final form)
+// ML prediction 
 async function predictWithML({ title, author, description }) {
   const baseUrl =
     "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio";
