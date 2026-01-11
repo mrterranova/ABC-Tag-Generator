@@ -3,7 +3,7 @@ import { useBookDescription } from "../components/scraper";
 import Results from "../pages/Results";
 import { fetchMLCategory } from "../services/flask";
 
-// SimpleForm interface
+// Props for the form
 interface SimpleFormProps {
   title?: string;
   author?: string;
@@ -17,28 +17,23 @@ export interface Book {
   author: string;
   mlCategory?: string;
   usrCategory?: string;
-  category?: string; 
+  category?: string;
   description?: string;
-  mlScore?: number[];
+  mlScore?: number[]; // keep as array for charts
 }
 
+// BookFetcher button
 interface BookFetcherProps {
   title: string;
   author: string;
   onDescriptionFetched: (desc: string) => void;
 }
 
-const BookFetcher: React.FC<BookFetcherProps> = ({
-  title,
-  author,
-  onDescriptionFetched,
-}) => {
+const BookFetcher: React.FC<BookFetcherProps> = ({ title, author, onDescriptionFetched }) => {
   const { description, fetchDescription, loading } = useBookDescription();
 
   useEffect(() => {
-    if (description) {
-      onDescriptionFetched(description);
-    }
+    if (description) onDescriptionFetched(description);
   }, [description, onDescriptionFetched]);
 
   return (
@@ -55,66 +50,78 @@ const BookFetcher: React.FC<BookFetcherProps> = ({
   );
 };
 
-const SimpleForm: React.FC<SimpleFormProps> = ({
-  title = "",
-  author = "",
-  description = "",
-}) => {
+const SimpleForm: React.FC<SimpleFormProps> = ({ title = "", author = "", description = "" }) => {
   const [bookTitle, setBookTitle] = useState(title);
   const [bookAuthor, setBookAuthor] = useState(author);
   const [bookDescription, setBookDescription] = useState(description);
   const [allBooks, setAllBooks] = useState<Book[]>([]);
   const [mlLoading, setMLLoading] = useState(false);
 
-  // Submit form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!bookTitle || !bookAuthor) return;
 
     try {
-      // Fetch ML field
       setMLLoading(true);
-      const {genre: mlCategory, scores} = await fetchMLCategory(
+
+      // Get ML predictions
+      const data = await fetchMLCategory(
         bookTitle,
         bookAuthor,
         bookDescription || ""
       );
+      const mlCategory = ""
+      console.log(data)
 
-      console.log("ML Prediction:", mlCategory, scores);
-      setMLLoading(false);
-
-      const newBook: Book = {
+      const tempBook: Book = {
         id: crypto.randomUUID(),
         title: bookTitle,
         author: bookAuthor,
-        mlCategory: mlCategory,
-        usrCategory: mlCategory, 
-        category: mlCategory,
+        mlCategory,
+        usrCategory: mlCategory, // default
         description: bookDescription || "",
-        mlScore: scores,
+        mlScore: data.scores,
       };
 
-      setAllBooks((prev) => [...prev, newBook]);
-
-      // Post the results
+      // POST
       const response = await fetch(`${process.env.REACT_APP_API_URL}books`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newBook),
+        body: JSON.stringify({
+          ...tempBook,
+          mlScore: JSON.stringify(data.scores),
+        }),
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        console.error("Backend error:", error);
-        alert("Failed to save book: " + error.message);
+        try {
+          const error = await response.json();
+          console.error("Backend error:", error);
+        } catch {
+          console.error("Backend returned invalid JSON");
+        }
+        alert("Failed to save book. See console for details.");
       } else {
         console.log("Book saved successfully!", mlCategory);
       }
 
-      // Reset fields on post
+      const savedBookRes = await fetch(`${process.env.REACT_APP_API_URL}books/${tempBook.id}`);
+      if (!savedBookRes.ok) {
+        console.error("Failed to fetch saved book");
+        setMLLoading(false);
+        return;
+      }
+
+      const savedBook: Book = await savedBookRes.json();
+
+      // Add to state
+      setAllBooks((prev) => [...prev, savedBook]);
+
+      // Reset form
       setBookTitle("");
       setBookAuthor("");
       setBookDescription("");
+      setMLLoading(false);
     } catch (err) {
       setMLLoading(false);
       console.error("Error during submission:", err);
@@ -122,11 +129,17 @@ const SimpleForm: React.FC<SimpleFormProps> = ({
     }
   };
 
-  const handleUpdateBook = (updatedBook: Book): void => {
+  const handleUpdateBook = (updatedBook: Book) => {
     setAllBooks((prevBooks) =>
       prevBooks.map((b) =>
         b.id === updatedBook.id
-          ? { ...updatedBook, category: updatedBook.usrCategory || updatedBook.mlCategory }
+          ? {
+              ...updatedBook,
+              category:
+                updatedBook.usrCategory && updatedBook.usrCategory.toLowerCase() !== "unknown"
+                  ? updatedBook.usrCategory
+                  : updatedBook.mlCategory || "Unknown",
+            }
           : b
       )
     );
@@ -137,47 +150,27 @@ const SimpleForm: React.FC<SimpleFormProps> = ({
       <form className="simple-form" onSubmit={handleSubmit}>
         <label>
           <span className="form-labels">Title</span>
-          <input
-            type="text"
-            value={bookTitle}
-            onChange={(e) => setBookTitle(e.target.value)}
-            required
-          />
+          <input type="text" value={bookTitle} onChange={(e) => setBookTitle(e.target.value)} required />
         </label>
 
         <label>
           <span className="form-labels">Author</span>
-          <input
-            type="text"
-            value={bookAuthor}
-            onChange={(e) => setBookAuthor(e.target.value)}
-            required
-          />
+          <input type="text" value={bookAuthor} onChange={(e) => setBookAuthor(e.target.value)} required />
         </label>
 
         <label>
           <span className="form-labels">Book Description</span>
-          <textarea
-            rows={6}
-            value={bookDescription}
-            onChange={(e) => setBookDescription(e.target.value)}
-          />
+          <textarea rows={6} value={bookDescription} onChange={(e) => setBookDescription(e.target.value)} />
         </label>
 
-        <BookFetcher
-          title={bookTitle}
-          author={bookAuthor}
-          onDescriptionFetched={setBookDescription}
-        />
+        <BookFetcher title={bookTitle} author={bookAuthor} onDescriptionFetched={setBookDescription} />
 
         <button className="form-btn" type="submit" disabled={mlLoading}>
           {mlLoading ? "Predicting Category..." : "Submit"}
         </button>
       </form>
 
-      {allBooks.length > 0 && (
-        <Results books={allBooks} onUpdateBook={handleUpdateBook} />
-      )}
+      {allBooks.length > 0 && <Results books={allBooks} onUpdateBook={handleUpdateBook} />}
     </>
   );
 };
