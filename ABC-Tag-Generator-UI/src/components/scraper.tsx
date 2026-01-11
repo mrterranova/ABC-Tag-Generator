@@ -11,7 +11,7 @@ export function useBookDescription() {
     setError(null);
     try {
       const res = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=intitle:${
+        `${process.env.GOOGLE_SCRAPER_URL}?q=intitle:${
             encodeURIComponent(title)}+inauthor:${encodeURIComponent(author)}        
         )}`
       );
