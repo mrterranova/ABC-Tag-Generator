@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useBookDescription } from "../components/scraper";
 import Results from "../pages/Results";
-import { fetchMLCategory } from "../services/flask";
 
 // Props for the form
 interface SimpleFormProps {
@@ -65,22 +64,12 @@ const SimpleForm: React.FC<SimpleFormProps> = ({ title = "", author = "", descri
       setMLLoading(true);
 
       // Get ML predictions
-      const data = await fetchMLCategory(
-        bookTitle,
-        bookAuthor,
-        bookDescription || ""
-      );
-      const mlCategory = ""
-      console.log(data)
 
       const tempBook: Book = {
         id: crypto.randomUUID(),
         title: bookTitle,
         author: bookAuthor,
-        mlCategory,
-        usrCategory: mlCategory, // default
         description: bookDescription || "",
-        mlScore: data.scores,
       };
 
       // POST
@@ -88,10 +77,10 @@ const SimpleForm: React.FC<SimpleFormProps> = ({ title = "", author = "", descri
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...tempBook,
-          mlScore: JSON.stringify(data.scores),
+          ...tempBook
         }),
       });
+      console.log('RES', response)
 
       if (!response.ok) {
         try {
@@ -102,7 +91,7 @@ const SimpleForm: React.FC<SimpleFormProps> = ({ title = "", author = "", descri
         }
         alert("Failed to save book. See console for details.");
       } else {
-        console.log("Book saved successfully!", mlCategory);
+        console.log("Book saved successfully!");
       }
 
       const savedBookRes = await fetch(`${process.env.REACT_APP_API_URL}books/${tempBook.id}`);

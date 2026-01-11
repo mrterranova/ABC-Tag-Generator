@@ -79,45 +79,54 @@ app.post("/books", async (req, res) => {
       });
     }
 
-    // Ensure 'mlScore' column exists
+    // Ensure mlScore column exists
     const columns = await db.all(`PRAGMA table_info(books)`);
     if (!columns.find(col => col.name === "mlScore")) {
       await db.run(`ALTER TABLE books ADD COLUMN mlScore TEXT`);
-      console.log("Added missing 'mlScore' column to books table.");
+      console.log("Added missing mlScore column");
     }
 
-    // Default ML values
     let mlCategory = "Unknown";
-    let mlScores = "[]";
+    let mlScores = [];
 
-    // Call ML service
+    // Call ML (server-side only)
     try {
       const mlResult = await predictWithML({ title, author, description });
-
-      mlCategory = mlResult.genre || "Unknown";
-      mlScores = Array.isArray(mlResult.scores) ? JSON.stringify(mlResult.scores) : "[]";
+      mlCategory = mlResult.genre;
+      mlScores = mlResult.scores;
     } catch (mlErr) {
       console.error("ML prediction failed:", mlErr);
-      // Keep defaults
     }
 
-    // Insert into SQLite
-    try {
-      await db.run(
-        `INSERT INTO books 
-         (id, title, author, mlCategory, usrCategory, description, mlScore)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        id, title, author, mlCategory, usrCategory || null, description, mlScores
-      );
-    } catch (dbErr) {
-      console.error("SQLite insert failed:", dbErr);
-      return res.status(500).json({ message: "Database insert failed", error: dbErr.message });
-    }
+    await db.run(
+      `INSERT INTO books 
+       (id, title, author, mlCategory, usrCategory, description, mlScore)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      id,
+      title,
+      author,
+      mlCategory,
+      usrCategory || null,
+      description,
+      JSON.stringify(mlScores)
+    );
 
-    res.status(200).json({ message: "Book added successfully", mlCategory, mlScores });
+    res.status(200).json({
+      message: "Book added successfully",
+      id, 
+      title,
+      author,
+      mlCategory,
+      usrCategory,
+      description,
+      mlScores
+    });
   } catch (err) {
     console.error("Unexpected error adding book:", err);
-    res.status(500).json({ message: "Unexpected server error", error: err.message });
+    res.status(500).json({
+      message: "Unexpected server error",
+      error: err.message
+    });
   }
 });
 
