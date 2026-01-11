@@ -3,6 +3,8 @@ import cors from "cors";
 import { openDB } from "./data/database.js"; // openDB points to ./data/books.sqlite
 import { seed } from "./seed.js";
 import fetch from "node-fetch";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -152,13 +154,11 @@ app.patch("/books/:id/category", async (req, res) => {
 
 // ML prediction
 async function predictWithML({ title, author, description }) {
-  const baseUrl =
-    "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio";
 
   console.log("[ML] Starting prediction for:", { title, author });
+  console.log(process.env.BASE_ML_URL)
 
-  // STEP 1: Start prediction
-  const startResponse = await fetch(baseUrl, {
+  const startResponse = await fetch(process.env.BASE_ML_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -173,11 +173,9 @@ async function predictWithML({ title, author, description }) {
   const { event_id } = await startResponse.json();
   console.log("[ML] Received event_id:", event_id);
 
-  // STEP 2: Fetch final result (SSE text)
-  const resultResponse = await fetch(`${baseUrl}/${event_id}`);
+  const resultResponse = await fetch(`${process.env.BASE_ML_URL}/${event_id}`);
   const text = await resultResponse.text();
 
-  // Extract the line starting with "data:"
   const dataLine = text.split("\n").find(line => line.startsWith("data: "));
 
   if (!dataLine) {

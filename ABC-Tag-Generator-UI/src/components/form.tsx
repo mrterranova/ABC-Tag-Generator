@@ -80,7 +80,6 @@ const SimpleForm: React.FC<SimpleFormProps> = ({ title = "", author = "", descri
           ...tempBook
         }),
       });
-      console.log('RES', response)
 
       if (!response.ok) {
         try {
