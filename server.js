@@ -108,7 +108,7 @@ app.post("/books", async (req, res) => {
       mlCategory,
       usrCategory || null,
       description,
-      JSON.stringify(mlScore)
+      JSON.stringify(mlScores)
     );
 
     res.status(200).json({
@@ -119,7 +119,7 @@ app.post("/books", async (req, res) => {
       mlCategory,
       usrCategory,
       description,
-      mlScore
+      mlScores
     });
   } catch (err) {
     console.error("Unexpected error adding book:", err);
@@ -210,7 +210,7 @@ async function predictWithML({ title, author, description }) {
 
   return {
     genre: label,
-    mlScore: probabilities
+    mlScores: probabilities
   };
 }
 
