@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
 from ml_model import predict_genre_with_scores
-import os
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
@@ -14,6 +13,9 @@ def predict():
     authors = data.get("authors", "")
     description = data.get("description", "")
 
+    if not description:
+        return jsonify({"genre": "Unknown", "scores": []})
+
     try:
         category, probs = predict_genre_with_scores(
             description, title, authors)
@@ -23,13 +25,8 @@ def predict():
         })
     except Exception as e:
         print("ML prediction failed:", e)
-        return jsonify({
-            "genre": "Unknown",
-            "scores": []
-        })
+        return jsonify({"genre": "Unknown", "scores": []})
 
 
 if __name__ == "__main__":
-    # Render uses $PORT automatically
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=7860)

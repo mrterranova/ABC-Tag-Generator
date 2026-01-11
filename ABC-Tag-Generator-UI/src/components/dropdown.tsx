@@ -1,5 +1,5 @@
 import React from "react";
-import { categoryLabels } from "../components/constants";
+import { categoryLabels } from "../utils/constants";
 
 interface CategoryDropdownProps {
   value: string;

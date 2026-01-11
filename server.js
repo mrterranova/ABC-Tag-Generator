@@ -151,20 +151,6 @@ app.patch("/books/:id/category", async (req, res) => {
 });
 
 // ML prediction
-// async function predictWithML({ title, author, description }) {
-//   const mlApiUrl = process.env.ML_API_URL || "http://127.0.0.1:7860/predict";
-
-//   const response = await fetch(mlApiUrl, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({ title, authors: author, description }),
-//   });
-
-//   const data = await response.json();
-//   return data;
-// }
-
-// ML prediction
 async function predictWithML({ title, author, description }) {
   const baseUrl =
     "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio";

@@ -1,39 +1,22 @@
-import os
-import tarfile
-import boto3
 import torch
 import joblib
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import os
 
-# Environment variables from Render
-BUCKET = os.environ["S3_BUCKET"]
-KEY = os.environ["S3_TARBALL_KEY"]
+LOCAL_MODEL_PATH = "./final_model"
 
-# Download and extract tarball
-if not os.path.exists("model"):
-    os.makedirs("model")
-
-s3 = boto3.client("s3")
-tar_path = "model/model.tar.gz"
-s3.download_file(BUCKET, KEY, tar_path)
-
-with tarfile.open(tar_path, "r:gz") as tar:
-    tar.extractall(path="model")
-
-MODEL_PATH = "model/final_model"  # folder inside tarball
-LABEL_ENCODER_PATH = "model/label_encoder.pkl"
-
-# Load tokenizer and model
-tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
-model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
+print(f"Loading model from local path: {LOCAL_MODEL_PATH}")
+tokenizer = AutoTokenizer.from_pretrained(LOCAL_MODEL_PATH)
+model = AutoModelForSequenceClassification.from_pretrained(LOCAL_MODEL_PATH)
 model.eval()
 
 # Load label encoder
-le = joblib.load(LABEL_ENCODER_PATH)
+le = joblib.load(os.path.join(LOCAL_MODEL_PATH, "label_encoder.pkl"))
 
 
 def predict_genre_with_scores(description, title="", authors=""):
     text = f"{title} by {authors}: {description}".strip()
+
     inputs = tokenizer(
         text,
         return_tensors="pt",

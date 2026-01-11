@@ -36,13 +36,13 @@ const RadarChart: React.FC<RadarChartProps> = ({ labels, data }) => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     scales: {
       r: {
         min: 0,
-        max: 1,
+        max: 10,
         ticks: {
-          stepSize: 0.1,
+          stepSize: 1,
         },
       },
     },

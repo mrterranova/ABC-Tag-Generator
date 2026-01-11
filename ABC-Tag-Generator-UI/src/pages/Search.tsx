@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Results from "./Results";
-import { categoryLabels } from "../components/constants";
+import { categoryLabels } from "../utils/constants";
 
 interface Book {
   id: string;
@@ -33,18 +33,31 @@ const Search: React.FC = () => {
       })
       .then((data) => {
         if (!data) return;
-        const parsedBooks = data.map((b: any) => ({
-          ...b,
-          category: b.usrCategory, 
-          mlScore: Array.isArray(b.mlScore)
-            ? b.mlScore.map((num: number) => (num < 0 ? 0 : num))
-            : [],
-        }));
+  
+        const parsedBooks = data.map((b: any) => {
+          // Default to mlCategory if usrCategory "Unknown"
+          const finalCategory =
+            !b.category || b.category.toLowerCase() === "unknown"
+              ? b.mlCategory || "Unknown"
+              : b.category;
+  
+          return {
+            ...b,
+            category: finalCategory,
+            mlScore: Array.isArray(b.mlScore)
+              ? b.mlScore
+              : b.mlScore
+              ? JSON.parse(b.mlScore)
+              : [],
+          };
+        });
+  
         setBooks(parsedBooks);
         setResults(parsedBooks);
       })
       .catch((err) => console.error("Error fetching books:", err));
   }, []);
+  
   
 
   // Handle search form
@@ -55,6 +68,7 @@ const Search: React.FC = () => {
       const matchesAuthor = author ? book.author.toLowerCase().includes(author.toLowerCase()) : true;
       const matchesCategory = category ? book.category === category : true;
       return matchesTitle && matchesAuthor && matchesCategory;
+
     });
     setResults(filteredBooks);
     setUpdateResults(true);

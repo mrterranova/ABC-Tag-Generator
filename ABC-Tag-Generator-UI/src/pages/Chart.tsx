@@ -1,7 +1,8 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import RadarChart from "../components/graph";
-import { categoryLabels } from "../components/constants";
+import { categoryLabels } from "../utils/constants";
+import { positiveLogTransform } from "../utils/helper";
 
 interface ChartState {
   title: string;
@@ -21,6 +22,7 @@ const Chart: React.FC = () => {
   }
 
   const { title, author, description, scores, mlCategory, category } = state;
+  const displayScores = positiveLogTransform(scores);
 
   return (
     <>
@@ -30,7 +32,7 @@ const Chart: React.FC = () => {
       </h1>
 
       <div className="chart-container">
-        <RadarChart labels={categoryLabels} data={scores} />
+        <RadarChart labels={categoryLabels} data={displayScores} />
         <div className="score-table-container">
           <h2>Category Scores</h2>
           <table className="score-table">

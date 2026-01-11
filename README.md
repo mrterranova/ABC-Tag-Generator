@@ -105,13 +105,13 @@ Create a .env file in the frontend and backend directories:
         - REACT_APP_ML_API_URL=
     Local Env
         - REACT_APP_API_URL="http://localhost:5000/"
-        - REACT_APP_ML_API_URL="http://127.0.0.1:5001/predict"
+        - REACT_APP_ML_API_URL="http://127.0.0.1:7860/predict"
 
 ### Backend(.env)
      Production Env
         - ML_API_URL=
      Local Env
-        - ML_API_URL="http://127.0.0.1:5001/predict"
+        - ML_API_URL="http://127.0.0.1:7860/predict"
 
 Note: Do not commit .env files to GitHub. Use deployment environment variables on Render/Netlify.
 
