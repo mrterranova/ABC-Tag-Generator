@@ -203,9 +203,8 @@ async function predictWithML({ title, author, description }) {
   console.log("[ML] Class probabilities:", probabilities);
 
   return {
-    label,
-    confidence: Math.max(...probabilities),
-    probabilities,
+    mlCategory: label,
+    scores: Math.max(...probabilities)
   };
 }
 
