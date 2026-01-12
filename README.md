@@ -6,6 +6,8 @@ Capstone Project - Machine Learning/AI Bootcamp
 ## Overview
 This project focuses on cleaning and preprocessing book datasets from multiple sources (Google Books API and Kaggle datasets). The goal is to produce a unified, high-quality dataset suitable for NLP tasks like **tag generation** and **category prediction**.
 
+Please also view full process of building the machine learning model in repository found [HERE](https://github.com/mrterranova/Automated-Book-Tagging-Generator).
+
 -------
 
 ## Table of Contents
@@ -81,7 +83,12 @@ ABC-Tag-Generator/
 ├─ seed.js                      # Database seeding script
 ├─ db.js                        # Database connection helper
 ├─ package.json                 # Backend dependencies & scripts
-└─ README.md
+├─ README.md
+└─ hf-upload /                  # Gradio API specifically for Hugging Face deployment
+     ├─ DOCKER
+     ├─ gradio_app.py
+     ├─ label_encoder.pkl
+     └─ ml_model.py
 
 ## Clone & Install
 
@@ -143,6 +150,7 @@ Includes search and filter functionality
 | Method | Endpoint              | Description                                             |
 | ------ | --------------------- | ------------------------------------------------------- |
 | GET    | `/books`              | Get all books (filter by `title`, `author`, `category`) |
+| GET    | `/books/:id`          | Get single book by id (not currently used)              |
 | POST   | `/books`              | Add a new book (calls ML service)                       |
 | PATCH  | `/books/:id/category` | Update user category for a book                         |
 
@@ -171,7 +179,7 @@ Load and preprocess the dataset:
     from datasets import Dataset
 
     # Load CSV
-    df = pd.read_csv("books.csv")
+    df = pd.read_csv("final_data_version.csv")
 
     # Encode labels
     le = LabelEncoder()
@@ -223,16 +231,22 @@ Fine tune model:
 
     training_args = TrainingArguments(
         output_dir="./results",
+        do_eval=True,   
+        eval_strategy="epoch",
+        save_strategy="epoch",
+        load_best_model_at_end=True,   
+        metric_for_best_model="f1", 
+        greater_is_better=True,
         num_train_epochs=4,
         per_device_train_batch_size=8,
         per_device_eval_batch_size=8,
-        evaluation_strategy="epoch",
-        save_strategy="epoch",
-        load_best_model_at_end=True,
-        metric_for_best_model="f1",
+        learning_rate=3e-5,
+        weight_decay=0.01,
+        warmup_ratio=0.1, 
         logging_dir="./logs",
-        report_to="none",
-        save_total_limit=2
+        logging_steps=100,
+        save_total_limit=2,
+        report_to="none" 
     )
 ```
 
@@ -250,12 +264,18 @@ Train model
 
     trainer.train()
 ```
+
+![Roberta Book Genre Classifier](./abc-tag-generator-ui/public/Training_roBERTa.png)
+
+
 Save Mdoel
 
 ```
 trainer.save_model("./final_model")
 tokenizer.save_pretrained("./final_model")
 ```
+
+![Roberta Book Genre Classifier](./abc-tag-generator-ui/public/Saving_roBERTa.png)
 
 Final Model structure should return: 
 final_model/
@@ -265,7 +285,10 @@ final_model/
 ├── tokenizer_config.json
 └── vocab.json
 
-Please see top structure for where to place this file in the repository.
+Please see top structure for where to place this file inside the repository once it is saved.
+
+For a full version of model completed to analyze: 
+[Python Script Final Model](https://github.com/mrterranova/Automated-Book-Tagging-Generator/blob/main/notebooks/Capstone_Final_Model.ipynb)
 
 ### Flask API
 ML API (Flask)
@@ -289,33 +312,109 @@ Response:
 
 ## Deployment
 ### Backend on Render
-Create a new Web Service on Render.
-Connect your GitHub repo.
-Set the build command:
+1. Create a new Web Service on Render.
+2. Connect your GitHub repo.
+3. Set the build command:
 `npm install`
 
-Start command:
+4. Start command:
 `npm run server`
 
-Add environment variables on Render listed above.
+5. Add environment variables on Render listed above.
 
 
 ### Frontend on Netlify
-Connect frontend repo (ABC-Tag-Generator-UI).
-Build command: `npm run build`
-Publish directory: `build`
+1. Connect frontend repo (ABC-Tag-Generator-UI).
+2. Build command: `npm run build`
+3. Publish directory: `build`
 
-Add environment variables listed above in Netlify configuration under "Environment Variables".
+4. Add environment variables listed above in Netlify configuration under "Environment Variables".
 
-### Flask API
-Navigate to your ml-api folder.
+### Machine Learning Model
+1. Complete the build of your machine learning model so that it saves as a folder. Folder should include the following structure: 
+     final_model/
+       ├─ config.json
+       ├─ tokenizer.json
+       ├─ vocab.json
+       └─ model.safetensors
+2. Save the `label_encoder.pkl` file and place as seen above. You will need to include for the API.
+3. Go to [Hugging Face Spaces](https://huggingface.co/), login and click Create new Space.
+4. Clone the repo locally:
+```git clone https://huggingface.co/<your-username>/roberta-book-genre
+cd roberta-book-genre
+```
+5. Copy your model files into the cloned repo.
+6. Push the model to Hugging Face using git commands and it should automatically start deployment.
+7. Now you can directly access your model. Be sure to update your gradio_app.py folder to your new model on Hugging Face, `<your-username>-<space-name>`.
+
+### Gradio API
+1. Make sure your ML model is ready (e.g., ml_model.py, trained model weights label_encoder.pkl, etc.).
+2. Create a Gradio app script (e.g., gradio_app.py) that exposes a prediction function. Please view inside the hf-upload folder for how to build.
+3. Go to [Hugging Face Spaces](https://huggingface.co/), login and click Create new Space. Choose a Python Space (or optional Docker).
+4. (Optional) Create a Docker file as seen above. Make sure that it points to port:7860 as this is what Hugging face recognizes.
+5. Upload your project files: gradio_app.py, ml_model.py (and model weights), requirements.txt (list all Python dependencies, e.g., gradio, torch, etc.)
+6. Hugging Face will automatically detect gradio_app.py and serve it or if docker file, will spin up the image. 
+7. Once deployed, your app will have a public URL, e.g.:
+`https://<your-username>-<space-name>.hf.space`
+8. Now test that Gradio is working on your user interface created. IE see the one for this repository: [MTerranova/roberta-book-genre-api](https://huggingface.co/spaces/MTerranova/roberta-book-genre-api)
+9. Ensure that API is working using cURL cmds in either the terminal or in POSTMAN.
+
+EXAMPLES OF TESTING USED:
+ ```
+ curl -s -X POST "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio" \
+-H "Content-Type: application/json" \
+-d '{
+  "data": [
+    "Good to Great",
+    "Jim Collins",
+    "An analysis of how companies transition from average performance to sustained excellence through disciplined leadership and strategy"
+  ]
+}' | jq -r '.event_id' | xargs -I {} curl -s "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio/{}"
+ ```
+ should see returned (event & data):
+ ```
+event: complete
+data: ["business/finance", [0.00011174344399478287, 0.9969701766967773, 0.0001264417514903471, 0.0011111185885965824, 0.00021374489006120712, 0.00026981779956258833, 0.0005156140541657805, 0.00045898358803242445, 0.00022248538152780384]]
+ ```
+ ```
+ curl -s -X POST "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio" \
+-H "Content-Type: application/json" \
+-d '{
+  "data": [
+    "The Guns of August",
+    "Barbara W. Tuchman",
+    "A detailed account of the opening month of World War I and the political and military decisions that shaped the conflict"
+  ]
+}' | jq -r '.event_id' | xargs -I {} curl -s "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio/{}"
+ ```
+should see return (event & data):
+```
+event: complete
+data: ["history", [0.00021246539836283773, 0.006904317066073418, 0.00010260281123919412, 0.00134474562946707, 0.9877997636795044, 0.00225885771214962, 0.0001367704098811373, 0.0009381313575431705, 0.0003023376048076898]]
+```
+ ```
+ curl -s -X POST "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio" \
+-H "Content-Type: application/json" \
+-d '{
+  "data": [
+    "The Da Vinci Code",
+    "Dan Brown",
+    "A symbologist is drawn into a deadly conspiracy involving secret societies, cryptic clues, and a race against time across Europe"
+  ]
+}' | jq -r '.event_id' | xargs -I {} curl -s "https://mterranova-roberta-book-genre-api.hf.space/gradio_api/call/predict_gradio/{}"
+ ```
+ should see return (event & data):
+ ```
+event: complete
+data: ["thriller", [0.005067174322903156, 0.0004816255532205105, 0.03581446036696434, 0.0002398443320998922, 0.0008293546852655709, 0.0006465901387855411, 0.0029014581814408302, 0.0006776368245482445, 0.9533419013023376]]
+ ```
 
 ## Contributing
-Fork the repo
-Create a branch (git switch -c feature/xyz)
-Commit your changes (git commit -m 'Add feature')
-Push (git push origin feature/xyz)
-Open a Pull Request
+1. Fork the repo
+2. Create a branch (git switch -c feature/xyz)
+3. Commit your changes (git commit -m 'Add feature')
+4. Push (git push origin feature/xyz)
+5. Open a Pull Request
 
 ## License
 This project is licensed under the MIT License © 2026 Michal Terranova
