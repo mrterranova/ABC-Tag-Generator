@@ -65,22 +65,17 @@ Note: Project is being hosted on free tier on their respective hosting websites,
 
 ## Project Structure
 
-[ABC-Tag-Generator/](https://github.com/mrterranova/ABC-Tag-Generator)
-
-├─ ABC-Tag-Generator-UI/        # React with Typescript
-
-│  ├─ src/
-
-│  │  ├─ pages/
-
-│  │  ├─ components/
-
-│  │  ├─ App.tsx
-
-|  |  └─ etc.
-│  └─ package.json
-├─ ml-api/                      # Python Flask API
-|   ├─ app.py
+[ABC-Tag-Generator/](https://github.com/mrterranova/ABC-Tag-Generator) # Repository for completed project
+-  [ABC-Tag-Generator-UI/](https://github.com/mrterranova/ABC-Tag-Generator/tree/main/ABC-Tag-Generator-UI)        # React Folder created with create-react-app
+     - [public/](https://github.com/mrterranova/ABC-Tag-Generator/tree/main/ABC-Tag-Generator-UI/public)                  # folder that stores all static files
+     - [src/](https://github.com/mrterranova/ABC-Tag-Generator/tree/main/ABC-Tag-Generator-UI/src)                     # source folder which contains the source code developers use for modifying code
+         -  [pages/](https://github.com/mrterranova/ABC-Tag-Generator/tree/main/ABC-Tag-Generator-UI/src/pages)              # folder holding independent pages inside the application. (not completely listed out)
+         -  [components/](https://github.com/mrterranova/ABC-Tag-Generator/tree/main/ABC-Tag-Generator-UI/src/components)         # folder holding shared or potentially shared components used on multiple pages (not completely listed out)
+         -  [AppRouter.tsx](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/ABC-Tag-Generator-UI/src/AppRouter.tsx)       # application routing file     
+         -  etc.               # all remaining folders and files such as helper functions, constants, gitignore, etc.
+     - [package.json](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/ABC-Tag-Generator-UI/package.json)             # consists of packages installed and scripts to run react application
+-  [ml-api/]()                      # python flask API 
+|   ├─ [app.py]()                       # 
 |   ├─ label_encoder.pkl
 |   ├─ ml_model.py
 |   └─ final_model/             # ML Model folder
