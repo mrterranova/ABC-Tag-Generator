@@ -22,6 +22,7 @@ Note: Project is being hosted on free tier on their respective hosting websites,
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
+  - [Summary](#summary)
   - [Prerequisites](#prerequisites)
   - [Clone & Install](#clone--install)
   - [Environment Variables](#environment-variables)
@@ -274,7 +275,7 @@ Train model
 ![Roberta Book Genre Classifier](./abc-tag-generator-ui/public/Training_roBERTa.png)
 
 
-Save Mdoel
+Save Model
 
 ```
 trainer.save_model("./final_model")
@@ -283,7 +284,7 @@ tokenizer.save_pretrained("./final_model")
 
 ![Roberta Book Genre Classifier](./abc-tag-generator-ui/public/Saving_roBERTa.png)
 
-Final Model structure should return: 
+Final Model structure expected return: 
 final_model/
 ├── config.json
 ├── pytorch_model.bin
