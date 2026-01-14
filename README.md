@@ -64,13 +64,19 @@ Note: Project is being hosted on free tier on their respective hosting websites,
 -----
 
 ## Project Structure
-```
-ABC-Tag-Generator/
+
+[ABC-Tag-Generator/](https://github.com/mrterranova/ABC-Tag-Generator)
+
 ├─ ABC-Tag-Generator-UI/        # React with Typescript
+
 │  ├─ src/
+
 │  │  ├─ pages/
+
 │  │  ├─ components/
+
 │  │  ├─ App.tsx
+
 |  |  └─ etc.
 │  └─ package.json
 ├─ ml-api/                      # Python Flask API
@@ -96,7 +102,7 @@ ABC-Tag-Generator/
      ├─ gradio_app.py
      ├─ label_encoder.pkl
      └─ ml_model.py
-```
+
 ## Clone & Install
 
 ### Clone repository
