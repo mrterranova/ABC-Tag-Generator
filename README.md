@@ -64,7 +64,7 @@ Note: Project is being hosted on free tier on their respective hosting websites,
 -----
 
 ## Project Structure
-
+```
 ABC-Tag-Generator/
 ├─ ABC-Tag-Generator-UI/        # React with Typescript
 │  ├─ src/
@@ -96,7 +96,7 @@ ABC-Tag-Generator/
      ├─ gradio_app.py
      ├─ label_encoder.pkl
      └─ ml_model.py
-
+```
 ## Clone & Install
 
 ### Clone repository
