@@ -1,7 +1,7 @@
 # Automated-Book- Categorization-Tag-Generator
 Capstone Project - Machine Learning/AI Bootcamp
 
-# 📚 Book Dataset Cleaning Pipeline
+# Book Dataset Cleaning Pipeline
 
 ## Overview
 This project focuses on cleaning and preprocessing book datasets from multiple sources (Google Books API and Kaggle datasets). The goal is to produce a unified, high-quality dataset suitable for NLP tasks like **tag generation** and **category prediction**.
