@@ -280,12 +280,14 @@ tokenizer.save_pretrained("./final_model")
 ![Roberta Book Genre Classifier](./abc-tag-generator-ui/public/Saving_roBERTa.png)
 
 Final Model structure expected return: 
+```
 final_model/
 ├── config.json
 ├── pytorch_model.bin
 ├── tokenizer.json
 ├── tokenizer_config.json
 └── vocab.json
+```
 
 Please see top structure for where to place this file inside the repository once it is saved.
 
@@ -333,12 +335,14 @@ Response:
 4. Add environment variables listed above in Netlify configuration under "Environment Variables".
 
 ### Machine Learning Model
-1. Complete the build of your machine learning model so that it saves as a folder. Folder should include the following structure: 
+1. Complete the build of your machine learning model so that it saves as a folder. Folder should include the following structure:
+```
      final_model/
        ├─ config.json
        ├─ tokenizer.json
        ├─ vocab.json
        └─ model.safetensors
+```
 2. Save the `label_encoder.pkl` file and place as seen above. You will need to include for the API.
 3. Go to [Hugging Face Spaces](https://huggingface.co/), login and click Create new Space.
 4. Clone the repo locally:
