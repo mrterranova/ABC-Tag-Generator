@@ -1,7 +1,8 @@
 # Automated-Book- Categorization-Tag-Generator
 Website: [https://abc-tag-generator.netlify.app](https://abc-tag-generator.netlify.app)
-Note: Project is being hosted on free tier on their respective hosting websites, due to larger model/application, the initial call will take longer as the system boots up. Waiting time can last to 5 minutes for first call as tested. 
 Hugging Face: [https://huggingface.co/spaces/MTerranova/roberta-book-genre-api](https://huggingface.co/spaces/MTerranova/roberta-book-genre-api)
+
+Note: Project is being hosted on free tier on their respective hosting websites, due to larger model/application, the initial call will take longer as the system boots up. Waiting time can last to 5 minutes for first call as tested. 
 
 # Book Dataset Cleaning Pipeline
 
