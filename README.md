@@ -17,7 +17,6 @@ This project focuses on cleaning and preprocessing book datasets from multiple s
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
-  - [Summary](#summary)
   - [Prerequisites](#prerequisites)
   - [Clone & Install](#clone--install)
   - [Environment Variables](#environment-variables)
@@ -27,6 +26,7 @@ This project focuses on cleaning and preprocessing book datasets from multiple s
 - [API Endpoints](#api-endpoints)
 - [Machine Learning](#machine-learning)
 - [Deployment](#deployment)
+- [Summary](#summary)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -410,6 +410,20 @@ data: ["history", [0.00021246539836283773, 0.006904317066073418, 0.0001026028112
 event: complete
 data: ["thriller", [0.005067174322903156, 0.0004816255532205105, 0.03581446036696434, 0.0002398443320998922, 0.0008293546852655709, 0.0006465901387855411, 0.0029014581814408302, 0.0006776368245482445, 0.9533419013023376]]
  ```
+## Summary
+The Automated Book Categorization & Tag Generator is an end-to-end, production ready system that demonstrates how modern machine learning can be integrated into a full-stack web application to solve real-world data classification problems. The project combines data cleaning, NLP model training, API-driven inference, and a user-facing React interface to automatically generate book categories and tags from titles, authors, and descriptions.
+
+The system leverages a fine-tuned RoBERTa-based text classification model trained on a multi-source dataset. This model is exposed through a Flask/Gradio ML API, deployed independently on Hugging Face Spaces, and called through a Node.js/Express backend that manages all apis queried, starts sqlite database, and returns predicted information from the machine learning model api. A React + TypeScript frontend provides an user-friendly interface for searching, viewing, and managing books with ML-generated predictions.
+
+The architecture intentionally separates concerns—frontend, backend, and ML services to initiate real-world deployment patterns and enable scalability for future features. Despite being hosted on free-tier services, the application is fully deployed and operational for users to begin running their book category queries.
+
+Overall, this project serves as a comprehensive example of:
+- Building and deploying a NLP model for text classification
+- Designing clean data preprocessing pipelines
+- Integrating ML into a fullstack web application
+- Deploying full-stack systems across multiple platforms
+
+It is well-suited as both a learning reference and a foundation for extending automated tagging recommendation systems.
 
 ## Contributing
 1. Fork the repo
