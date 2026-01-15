@@ -6,7 +6,7 @@ export default function NextSteps() {
       <div className="parallax-layer">
         <img
           className="parallax-layer-i"
-          src="bookshelf-home-2.jpg"
+          src="imgs/bookshelf-home-2.jpg"
           alt="Bookshelf"
         />
       </div>

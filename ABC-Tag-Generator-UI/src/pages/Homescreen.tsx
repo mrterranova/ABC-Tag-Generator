@@ -11,7 +11,7 @@ export default function Home() {
       <div className="hero-section">
         <img
           className="hero-background"
-          src="bookshelf-home-1.jpg"
+          src="imgs/bookshelf-home-1.jpg"
           alt="Bookshelf"
         />
         <div className="hero-overlay">

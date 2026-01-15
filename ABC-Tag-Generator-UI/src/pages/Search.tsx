@@ -86,7 +86,7 @@ const Search: React.FC = () => {
       <div className="parallax-layer">
         <img
           className="parallax-layer-i"
-          src="book-row.jpg"
+          src="imgs/book-row.jpg"
           alt="Bookshelf"
         />
       </div>

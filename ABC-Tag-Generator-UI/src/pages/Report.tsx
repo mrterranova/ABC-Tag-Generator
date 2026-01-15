@@ -8,7 +8,7 @@ export default function Report() {
       <div className="parallax-layer">
         <img
           className="parallax-layer-i"
-          src="open-book.jpg"
+          src="imgs/open-book.jpg"
           alt="Bookshelf"
         />
         </div>
@@ -33,7 +33,7 @@ export default function Report() {
 
 
         <h1 className="report-header">Section 3: Data - My Resources for This Capstone</h1>
-            <p className="re-img-container"><img className="resource-img" src="googlebooks-resource.png" alt="google-books img" /><img className="resource-img" src="goodreads-resource.png" alt="goodreads img"/><img className="resource-img" src="bookkaggle-resource.png" alt="kaggle img"/></p>
+            <p className="re-img-container"><img className="resource-img" src="imgs/googlebooks-resource.png" alt="google-books img" /><img className="resource-img" src="imgs/goodreads-resource.png" alt="imgs/goodreads img"/><img className="resource-img" src="imgs/bookkaggle-resource.png" alt="kaggle img"/></p>
           <p className="report-para">For this project, I compiled a large book dataset by combining multiple sources to ensure broad coverage and diversity among all categories. The primary sources included the Google Books API, filtered by a wide swath of categories that could lend itself easily to one generalized category. And the remaining two datasets were large publicly available Kaggle datasets: the Books Dataset by Abdallah Wagih Ibrahim and the Goodreads 100k books dataset. The combined dataset originally contained over 137,000 records, well above the capstone minimum amount of 15,000. This provided me with enough room to do the cleaning necessary to ensure that categories were balanced and records with missing data could be extracted from the dataset list without concern.</p>
           <p className="report-para">Extensive cleaning and normalization were applied, including removal of duplicate entries, filtering for English-language content, standardizing authors and categories, and ensuring meaningful descriptions. At this stage, 15 major categories were identified, including art, business/finance, culture/folklore, fantasy, general fiction, history, humanities, psychology, religion, romance, science, science fiction, slice of life, spirituality, and thriller. This would later be reduced down to the 9 categories seen in the project. In order to acheive a limited number of categories while maintaining an average of ~4,500 samples per category, some liberties were taken. The data's subgenres, or the original genre(s), was filtered in order to ensure that all data fell into one category or another. Due to the nature of some of the data being multi-genre, there were some inaccuracies in this process leading to discrepancies seen later in the model. However, the tradeoff was gaining valuable time needed for moving forward with the project. And this tradeoff also included keeping multi-genre books which kept the data samples relatively high.</p>
           <p className="report-para">Outliers found from the description length were left alone as this was real world data and I did not want to cap the results. I did however, remove descriptions that were not verbose enough to produce substantial information needed in the machine model. In the end, ~59,707 book records remained after a thorough cleaning and balancing process and 9 categories had enough data to move forward. All the other categories were dropped for the current version in the model. This is a feature I would prefer to revisit later when time and resources allow. </p>
@@ -49,15 +49,15 @@ export default function Report() {
           <p className="report-para">It was at this part of my journey that the underperforming categories had to be reanalyzed further. Categories such as humanities, psychology, and slice of life were consistently bleeding into other categories. The decision was made at this point to try restrengthening these categories in order to boost performance. However, this came to no avail and eventually the 3 categories were cut in this stage and did not proceed too much further in the experimental phase. The category size was then reduced to 10 categories.</p>
             <p className="re-img-container">
               <figure>
-                <img className="re-graph" src="logistic_regression.png" alt="logistic regression" />
+                <img className="re-graph" src="imgs/logistic_regression.png" alt="logistic regression" />
                 <figcaption>Confusion Matrix for Logistic Regression</figcaption>
               </figure>
               <figure>
-                <img className="re-graph" src="random_forest.png" alt="random forest"/>
+                <img className="re-graph" src="imgs/random_forest.png" alt="random forest"/>
                 <figcaption>Confusion Matrix for Random Forest</figcaption>
               </figure>
               <figure>
-                <img className="re-graph" src="xgboost.png" alt="xgboost" />
+                <img className="re-graph" src="imgs/xgboost.png" alt="xgboost" />
                 <figcaption>Confusion Matrix for XGBoost</figcaption>
               </figure>
             </p>
@@ -75,11 +75,11 @@ export default function Report() {
           <p className="report-para">The final conclusion of the which model and how to tune brought data back to discussion. While my model was on parr with other models as seen above with similar projects, the data for the fantasy/horror was holding back the model from making greater strides concerning accuracy and overall performance. After consulting with mentors on this particular detail, the only conclusion was to rerun how I separated my data and split the fields fantasy/horror, remove horror and add fantasy to science fiction since there was a significant overlap between the two generes, thus making 9 categories to train. This significantly improved my model's results from an accuracy of 74%-75% to 78%.</p>
             <p className="re-img-container">
               <figure>
-                <img className="re-graph" src="roberta-final.png" alt="roberta confusion matrix" />
+                <img className="re-graph" src="imgs/roberta-final.png" alt="roberta confusion matrix" />
                 <figcaption>RoBERTa Confusion Matrix</figcaption>
               </figure>
               <figure>
-                <img className="re-graph" src="roberta-matrix.png" alt="roberta classification report"/>
+                <img className="re-graph" src="imgs/roberta-matrix.png" alt="roberta classification report"/>
                 <figcaption>RoBERTa Classification Report</figcaption>
               </figure>
             </p>

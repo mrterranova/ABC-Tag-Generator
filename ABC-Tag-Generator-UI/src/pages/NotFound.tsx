@@ -7,7 +7,7 @@ export default function NotFound() {
       <div className="hero-section">
         <img
           className="hero-background"
-          src="bookshelf-home-1.jpg"
+          src="imgs/bookshelf-home-1.jpg"
           alt="Bookshelf"
         />
         <h1> PAGE NOT FOUND - Sorry</h1>

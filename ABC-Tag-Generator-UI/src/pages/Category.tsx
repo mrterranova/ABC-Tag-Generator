@@ -8,7 +8,7 @@ export default function Category() {
       <div className="parallax-layer">
         <img
           className="parallax-layer-i"
-          src="library.jpg"
+          src="imgs/library.jpg"
           alt="Bookshelf"
         />
       </div>
