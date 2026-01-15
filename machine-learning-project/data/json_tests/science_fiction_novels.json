@@ -1,0 +1,91 @@
+[
+    {
+        "description": "A young physicist discovers a hidden dimension where time flows backwards.",
+        "title": "The Quantum Paradox",
+        "authors": "A. J. Fields"
+    },
+    {
+        "description": "Humanity builds an AI capable of predicting every future decision, causing global chaos.",
+        "title": "The Oracle Machine",
+        "authors": "N. Reyes"
+    },
+    {
+        "description": "An astronaut stranded on a distant moon discovers ruins of a civilization eerily similar to Earth's.",
+        "title": "Echoes of Selene",
+        "authors": "Marin Holt"
+    },
+    {
+        "description": "An astronaut stranded on a distant moon discovers ruins of a civilization eerily similar to Earth's.",
+        "title": "Echoes of Selene",
+        "authors": "Marin Holt"
+    },
+        {
+        "title": "Echoes of Selene",
+        "authors": "Marin Holt",
+        "description": "A stranded astronaut finds ruins on a distant moon that mirror Earth's ancient civilizations."
+    },
+    {
+        "title": "The Last Archive",
+        "authors": "Dorian Kessler",
+        "description": "Humanity uploads memories to a galactic database, but a hacker uncovers evidence that the universe itself is a simulation."
+    },
+    {
+        "title": "Neon Exodus",
+        "authors": "Kai Donovan",
+        "description": "After megacities outlaw emotions, rebels engineer a virus that reactivates human feelings—at catastrophic cost."
+    },
+    {
+        "title": "Planetfall Protocol",
+        "authors": "Rhea Sundstrom",
+        "description": "A colonization mission discovers an alien species that communicates through gravitational waves instead of language."
+    },
+    {
+        "title": "The Chrono Harvesters",
+        "authors": "Lewis Arden",
+        "description": "Time-travelers exploit pivotal historical events, harvesting temporal energy until the timeline starts collapsing."
+    },
+    {
+        "title": "Singularity’s Children",
+        "authors": "M. Vega",
+        "description": "Genetically-modified children born with neural implants develop a collective consciousness that begins rewriting evolution."
+    },
+    {
+        "title": "The Rift Below",
+        "authors": "Helena Marr",
+        "description": "A mining expedition drills beneath Earth's crust and discovers a sentient ecosystem older than the planet itself."
+    },
+    {
+        "title": "Starlight Dominion",
+        "authors": "Tarek Monroe",
+        "description": "An empire powered by harvested starlight faces rebellion when scientists uncover a star that resists extraction."
+    },{
+        "title": "Red Mars",
+        "authors": "Kim Stanley Robinson",
+        "description": "The first in a trilogy chronicling the colonization and terraforming of Mars, combining political, scientific, and social challenges of a futuristic society."
+      },
+      {
+        "title": "Altered Carbon",
+        "authors": "Richard K. Morgan",
+        "description": "A noir-style futuristic story where human consciousness can be digitized and transferred, following a former soldier turned investigator."
+      },
+      {
+        "title": "Foundation",
+        "authors": "Isaac Asimov",
+        "description": "A futuristic epic about the collapse of a Galactic Empire and a group of scientists using psychohistory to preserve knowledge and guide the future."
+      },
+      {
+        "title": "Ready Player One",
+        "authors": "Ernest Cline",
+        "description": "Set in a dystopian near-future, the story revolves around a virtual reality universe called the OASIS, where young gamers compete for ultimate control and wealth."
+      },
+      {
+        "title": "The Three-Body Problem",
+        "authors": "Liu Cixin",
+        "description": "In a near-future China, humanity faces contact with an alien civilization, leading to global scientific, political, and existential challenges."
+      },
+      {
+        "title": "Children of Time",
+        "authors": "Adrian Tchaikovsky",
+        "description": "Humanity attempts to colonize a distant planet, only to find intelligent, evolving spiders, leading to a high-concept exploration of evolution, society, and survival."
+      }
+]

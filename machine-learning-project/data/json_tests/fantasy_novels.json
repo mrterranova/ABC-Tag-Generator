@@ -1,0 +1,137 @@
+[
+    {
+        "title": "The Lord of the Rings",
+        "authors": "J.R.R. Tolkien",
+        "description": "An epic journey through Middle-earth where hobbits, elves, and men unite to destroy the One Ring and defeat the Dark Lord Sauron."
+    },
+    {
+        "title": "A Game of Thrones",
+        "authors": "George R.R. Martin",
+        "description": "The first book in the 'A Song of Ice and Fire' series, featuring noble families vying for power in a medieval fantasy world filled with intrigue and dragons."
+    },
+    {
+        "title": "The Name of the Wind",
+        "authors": "Patrick Rothfuss",
+        "description": "The story of Kvothe, a magically gifted young man, as he grows from a gifted child to a legendary figure in the world of Temerant."
+    },
+    {
+        "title": "Mistborn: The Final Empire",
+        "authors": "Brandon Sanderson",
+        "description": "In a world ruled by a Dark Lord, a group of rebels with magical abilities attempt to overthrow the oppressive Lord Ruler."
+    },
+    {
+        "title": "The Wheel of Time: The Eye of the World",
+        "authors": "Robert Jordan",
+        "description": "The beginning of a sprawling epic where young villagers are thrust into a struggle between the forces of Light and Shadow."
+    },
+    {
+        "title": "The Way of Kings",
+        "authors": "Brandon Sanderson",
+        "description": "An epic tale of war, politics, and magic set in the storm-ravaged world of Roshar, following multiple characters whose destinies intertwine."
+    },
+    {
+        "title": "The Hobbit",
+        "authors": "J.R.R. Tolkien",
+        "description": "Bilbo Baggins embarks on an unexpected adventure with dwarves to reclaim treasure from the dragon Smaug."
+    },
+    {
+        "title": "The Silver Citadel",
+        "authors": "Ronan Graves",
+        "description": "A humble blacksmith discovers a sword that awakens an ancient citadel ruled by sentient metal guardians who demand a new king."
+    },
+    {
+        "title": "Thornborn",
+        "authors": "Elara Wyn",
+        "description": "A young noble cursed to sprout thorns from her skin must track down the forest god who doomed her bloodline."
+    },
+    {
+        "title": "Ashes of the First Dragon",
+        "authors": "Kellan Drake",
+        "description": "The skeleton of the world's first dragon is unearthed, and kingdoms race to harness the power trapped in its molten heart."
+    },
+    {
+        "title": "Mooncarver",
+        "authors": "Sera Valen",
+        "description": "A thief who steals moonlight discovers she can bend time, attracting the attention of celestial beings who want her dead."
+    },
+    {
+        "title": "The Library of Fallen Names",
+        "authors": "Rowan Everhart",
+        "description": "Every human name ever erased from history is stored in a forbidden library, and one boy finds his own name there."
+    },
+    {
+        "title": "Stormfeather",
+        "authors": "Myra Kael",
+        "description": "A warrior who rides lightning-forged birds must defend her homeland from storm spirits seeking revenge."
+    },
+    {
+        "title": "The Bone Harps",
+        "authors": "Tharin Morrow",
+        "description": "Music crafted from enchanted bones summons the dead, and a bard accidentally awakens an army bound to her voice."
+    },
+    {
+        "title": "Blood of the Winter King",
+        "authors": "Varek Thorn",
+        "description": "The tyrant king frozen in ice begins to thaw as winter spreads unnaturally across the realm."
+    },
+    {
+        "title": "Gilded Serpent",
+        "authors": "Isolde Ryn",
+        "description": "A guild of alchemists hunts a mythical serpent whose golden scales can rewrite reality."
+    },
+    {
+        "title": "The Lantern of Echo Vale",
+        "authors": "Callum Stride",
+        "description": "A magical lantern reveals the future to its holder, but each glimpse shortens their life."
+    },
+    {
+        "title": "Crown of Morrowind",
+        "authors": "Taless Renn",
+        "description": "A prince wakes up with no memory and a crown fused to his skull that whispers commands in a forgotten language."
+    },
+    {
+        "title": "The Warden of Hollowfen",
+        "authors": "Arius Rhys",
+        "description": "A forest spirit chooses a reluctant teenager as its champion against encroaching mechanical gods."
+    },
+    {
+        "title": "Feathers of Fire",
+        "authors": "Janelle Quill",
+        "description": "Phoenix riders are losing control of their flames, suggesting the mythical bird of creation has died."
+    },
+    {
+        "title": "The Sorcerer's Debt",
+        "authors": "Marek Holt",
+        "description": "A sorcerer who borrowed magic from demons must repay his debt with the lives of those he loves."
+    },
+    {
+        "title": "The Broken Rune",
+        "authors": "Silas Ember",
+        "description": "A runestone cracks, releasing spells that alter reality at random and plunge the world into chaos."
+    },
+    {
+        "title": "Riversong",
+        "authors": "Elin Arder",
+        "description": "A girl learns rivers are alive and demand tribute—or cities built on their shores will drown overnight."
+    },
+    {
+        "title": "Glassborn",
+        "authors": "Dalia Mire",
+        "description": "Children born with glass bones wield powerful magic, but every spell pushes them closer to shattering."
+    },
+    {
+        "title": "The Dreamforger",
+        "authors": "Oren Vale",
+        "description": "An artisan forges weapons out of dreams, unaware a nightmare entity is using him to invade reality."
+    },
+    {
+        "title": "The Ember Oath",
+        "authors": "Lyra Kenton",
+        "description": "A girl bound by a fiery oath can never speak a lie—if she does, the fire consumes her soul."
+    },
+    {
+        "title": "The Last Griffin Keeper",
+        "authors": "Torin Wilder",
+        "description": "A stable boy becomes guardian of the last griffin egg, hunted by all who fear the creature’s return."
+    }
+]

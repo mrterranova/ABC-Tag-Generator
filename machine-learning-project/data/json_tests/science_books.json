@@ -1,0 +1,102 @@
+[
+    {
+        "title": "The Memory Code of Life",
+        "authors": "Dr. Marcus Velasquez",
+        "description": "A biophysicist uncovers a molecular mechanism that allows cells to store memories like computers, challenging the boundary between biology and artificial intelligence."
+    },
+    {
+        "title": "Quantum Horizons",
+        "authors": "Elena Marwick",
+        "description": "Explains recent breakthroughs in quantum mechanics and their potential applications in computing and communication."
+    },
+    {
+        "title": "Starlight and Time",
+        "authors": "Julian Crane",
+        "description": "Explores the physics of black holes, neutron stars, and the mysteries of the expanding universe."
+    },
+    {
+        "title": "The Code of Genes",
+        "authors": "Sophia Callen",
+        "description": "Delves into modern genetics, CRISPR, and how understanding DNA is revolutionizing medicine."
+    },
+    {
+        "title": "Chaos in Nature",
+        "authors": "Marcus Eldridge",
+        "description": "A study of chaos theory and complex systems in ecosystems, weather patterns, and human behavior."
+    },
+    {
+        "title": "Invisible Forces",
+        "authors": "Lydia Harrow",
+        "description": "Explains fundamental forces like electromagnetism, gravity, and their role in shaping our physical world."
+    },
+    {
+        "title": "The Brain’s Atlas",
+        "authors": "Isabella Rey",
+        "description": "Maps the structure and functions of the human brain, revealing the neural pathways behind memory, emotion, and perception."
+    },
+    {
+        "title": "Artificial Life",
+        "authors": "Omar Kline",
+        "description": "Explores robotics, AI, and the ethical implications of machines that can learn and adapt like living beings."
+    },
+    {
+        "title": "Particles and Paradox",
+        "authors": "Helena Rivard",
+        "description": "Introduces particle physics and quantum phenomena that defy everyday intuition."
+    },
+    {
+        "title": "The Climate Equation",
+        "authors": "Victor Raines",
+        "description": "Analyzes climate change, environmental science, and models predicting the future of our planet."
+    },
+    {
+        "title": "The Evolutionary Thread",
+        "authors": "Elena Marwick",
+        "description": "Chronicles the evolution of life on Earth from single cells to complex organisms and ecosystems."
+    },
+    {
+        "title": "Genome Frontiers",
+        "authors": "Dr. Marcus Velasquez",
+        "description": "Discusses cutting-edge research in genomics and its implications for health, longevity, and ethics."
+    },
+    {
+        "title": "The Cosmos Within",
+        "authors": "Julian Crane",
+        "description": "Connects human biology with cosmic phenomena, exploring our place in the universe."
+    },
+    {
+        "title": "Neural Revolutions",
+        "authors": "Sophia Callen",
+        "description": "Examines breakthroughs in neuroscience and AI, focusing on the interface between mind and machine."
+    },
+    {
+        "title": "Energy and Matter",
+        "authors": "Marcus Eldridge",
+        "description": "Explains fundamental principles of physics in accessible terms, from atoms to galaxies."
+    },
+    {
+        "title": "The Hidden Genome",
+        "authors": "Isabella Rey",
+        "description": "Investigates the non-coding regions of DNA and their surprising role in evolution and disease."
+    },
+    {
+        "title": "Time’s Fabric",
+        "authors": "Omar Kline",
+        "description": "Explores theories of relativity, spacetime, and the frontiers of modern cosmology."
+    },
+    {
+        "title": "The Microbial World",
+        "authors": "Helena Rivard",
+        "description": "A deep look into bacteria, viruses, and the microscopic life forms that shape our ecosystem and health."
+    },
+    {
+        "title": "Physics of the Impossible",
+        "authors": "Victor Raines",
+        "description": "Explores concepts once considered science fiction and examines their plausibility through modern physics."
+    },
+    {
+        "title": "The Mathematics of Nature",
+        "authors": "Elena Marwick",
+        "description": "Demonstrates how patterns, fractals, and mathematical structures govern everything from biology to astronomy."
+    }
+]
