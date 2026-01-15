@@ -8,6 +8,20 @@ The frontend communicates with an express API which contains the logic to call o
 
 ---
 
+## Routing and Navigation
+
+Client-side routing is handled using React Router. This allows users to navigate between pages without full page reloads, creating a smoother user experience.
+
+The navigation bar provides links to:
+- Home
+- Categorization form
+- Search
+- Reports
+- Next steps
+
+Programmatic navigation is used via react-router package where appropriate (ie, buttons that redirect users to specific pages).
+
+
 ## Features
 
 - User-friendly form for book information input
@@ -16,7 +30,15 @@ The frontend communicates with an express API which contains the logic to call o
 - Uses environment variables for API configuration
 - Designed to be lightweight and deployable on free hosting platforms
 
----
+## API Integration
+
+The frontend communicates with the backend API using HTTP requests to:
+
+1. Submit book data for categorization
+2. Retrieve categorized results
+3. Perform searches and reporting tasks
+
+This separation ensures the UI remains lightweight while all processing and data handling occur on the server.
 
 ## Tech Stack
 
@@ -49,46 +71,27 @@ react-frontend/
 └── README.md           # Instruction guide to React folder
 ```
 
+## Development Workflow
 
+The React application is developed and run independently from the backend:
 
-# Getting Started with Create React App
+```
+cd ABC-Tag-Generator-UI
+npm install
+npm run dev
+```
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+During development, the UI runs on a local development server and communicates with the backend via API endpoints.
 
-## Available Scripts
+## Build and Deployment
 
-In the project directory, you can run:
+For production, the frontend is compiled into static assets using:
+```
+npm run build
+```
 
-### `npm start`
+This generates an optimized build that can be deployed to any static hosting service or served by the backend.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Summary
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+The React frontend provides a clean, user-friendly interface that connects users to the ABC Tag Generator’s backend and machine learning services. By separating the UI into its own application, the project achieves better maintainability, scalability, and flexibility for future enhancements.
