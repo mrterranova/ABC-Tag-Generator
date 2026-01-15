@@ -1,5 +1,7 @@
 # Automated-Book- Categorization-Tag-Generator
-Capstone Project - Machine Learning/AI Bootcamp
+Website: [https://abc-tag-generator.netlify.app](https://abc-tag-generator.netlify.app)
+Note: Project is being hosted on free tier on their respective hosting websites, due to larger model/application, the initial call will take longer as the system boots up. Waiting time can last to 5 minutes for first call as tested. 
+Hugging Face: [https://huggingface.co/spaces/MTerranova/roberta-book-genre-api](https://huggingface.co/spaces/MTerranova/roberta-book-genre-api)
 
 # Book Dataset Cleaning Pipeline
 
@@ -7,13 +9,6 @@ Capstone Project - Machine Learning/AI Bootcamp
 This project focuses on cleaning and preprocessing book datasets from multiple sources (Google Books API and Kaggle datasets). The goal is to produce a unified, high-quality dataset suitable for NLP tasks like **tag generation** and **category prediction**.
 
 Please also view full process of building the machine learning model in repository found [HERE](https://github.com/mrterranova/Automated-Book-Tagging-Generator).
-
--------
-## Final Project Link: [HERE](https://abc-tag-generator.netlify.app)
-Note: Project is being hosted on free tier on their respective hosting websites, due to larger model/application, the initial call will take longer as the system boots up. Waiting time can last to 5 minutes for first call as tested. 
-
-### For Hugging Face, where machine learning model and gradio API is located, you can also use the UI built on the screen to generate results and/or see when model is running: 
-[HERE](https://huggingface.co/spaces/MTerranova/roberta-book-genre-api)
 -------
 
 ## Table of Contents
