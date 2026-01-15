@@ -74,29 +74,28 @@ Note: Project is being hosted on free tier on their respective hosting websites,
          -  [AppRouter.tsx](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/ABC-Tag-Generator-UI/src/AppRouter.tsx)       # application routing file     
          -  etc.               # all remaining folders and files such as helper functions, constants, gitignore, etc.
      - [package.json](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/ABC-Tag-Generator-UI/package.json)             # consists of packages installed and scripts to run react application
--  [ml-api/]()                      # python flask API 
-|   ├─ [app.py]()                       # 
-|   ├─ label_encoder.pkl
-|   ├─ ml_model.py
-|   └─ final_model/             # ML Model folder
-|       ├─ config.json
-|       ├─ tokenizer.json
-|       ├─ vocab.json
-|       └─ model.safetensors
-|
-├─ data/                       # SQLite database
-│  ├─ books.sqlite
-|  └─ database.js
-├─ server.js                    # Express backend entry
-├─ seed.js                      # Database seeding script
-├─ db.js                        # Database connection helper
-├─ package.json                 # Backend dependencies & scripts
-├─ README.md
-└─ hf-upload /                  # Gradio API specifically for Hugging Face deployment
-     ├─ DOCKER
-     ├─ gradio_app.py
-     ├─ label_encoder.pkl
-     └─ ml_model.py
+-  [ml-api/](https://github.com/mrterranova/ABC-Tag-Generator/tree/main/ml-api)                      # python flask (local) API folder
+     -  [app.py](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/ml-api/app.py)                       # routing file for prediction results
+     -  [label_encoder.pkl]()       # sklearn file that turns text to numeric values  **NOTE: Replace this file after building own model**
+     -  [ml_model.py]()             # connects and runs the machine learning model locally
+     -  [roberta_model/]()             # Machine Learning folder **NOTE: This file is not in the repository and will not be added, one must create their own to run locally**
+        - [config.json]()           # model configuration that handle how to run tokens
+        - [tokenizer.json]()        # creates tokens
+        - [vocab.json]()            # contains list and words inside token with unique identifiers
+        - [model.safetensors]()     # preserves model weights
+-  [data/]()                       # SQLite database folder
+     -  [books.sqlite]()              # table structure
+     -  [database.js]()               # database creation and execution file
+-  [server.js]()                    # Express backend, contains centralized apis and call to machine learning api
+-  [seed.js]()                      # Database seeding script to seed database
+-  [db.js]()                        # Database connection helper
+-  [package.json]()                 # Backend dependencies & scripts for running the server and run react simultaneously
+-  [README.md]()                    # Main instructions for running all folders/files
+-  [hf-upload /]()                  # Gradio API specifically made for Hugging Face deployment
+     - [DOCKER]()                   # Containerizing the gradio api
+     - [gradio_app.py]()               # gradio UI and routing logic
+     - [label_encoder.pkl]()           # sklearn file that turns text to numeric values  **NOTE: Replace this file after building own model**
+     - [ml_model.py]()                 # connects and runs the machine learning model on Hugging Face                
 
 ## Clone & Install
 
