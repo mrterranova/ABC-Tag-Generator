@@ -9,7 +9,6 @@ Note: Project is being hosted on free tier on their respective hosting websites,
 ## Overview
 This project focuses on cleaning and preprocessing book datasets from multiple sources (Google Books API and Kaggle datasets). The goal is to produce a unified, high-quality dataset suitable for NLP tasks like **tag generation** and **category prediction**.
 
-Please also view full process of building the machine learning model in repository found [HERE](https://github.com/mrterranova/Automated-Book-Tagging-Generator).
 -------
 
 ## Table of Contents
