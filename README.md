@@ -4,6 +4,9 @@ Website: [https://abc-tag-generator.netlify.app](https://abc-tag-generator.netli
 
 Note: Project is being hosted on free tier on their respective hosting websites, due to larger model/application, the initial call will take longer as the system boots up. Waiting time can last to 5 minutes for first call as tested. 
 
+## Video Tour
+Series of video guides of my project as presented by me: [Click here to see tour](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/website-tour/TOURPAGE.md)
+
 # Book Dataset Cleaning Pipeline
 
 ## Overview
@@ -71,26 +74,27 @@ This project focuses on cleaning and preprocessing book datasets from multiple s
      - [package.json](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/ABC-Tag-Generator-UI/package.json)             # consists of packages installed and scripts to run react application
 -  [ml-api/](https://github.com/mrterranova/ABC-Tag-Generator/tree/main/ml-api)                      # python flask (local) API folder
      -  [app.py](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/ml-api/app.py)                       # routing file for prediction results
-     -  [label_encoder.pkl]()       # sklearn file that turns text to numeric values  **NOTE: Replace this file after building own model**
-     -  [ml_model.py]()             # connects and runs the machine learning model locally
-     -  [roberta_model/]()             # Machine Learning folder **NOTE: This file is not in the repository and will not be added, one must create their own to run locally**
-        - [config.json]()           # model configuration that handle how to run tokens
-        - [tokenizer.json]()        # creates tokens
-        - [vocab.json]()            # contains list and words inside token with unique identifiers
-        - [model.safetensors]()     # preserves model weights
--  [data/]()                       # SQLite database folder
-     -  [books.sqlite]()              # table structure
-     -  [database.js]()               # database creation and execution file
--  [server.js]()                    # Express backend, contains centralized apis and call to machine learning api
--  [seed.js]()                      # Database seeding script to seed database
--  [db.js]()                        # Database connection helper
--  [package.json]()                 # Backend dependencies & scripts for running the server and run react simultaneously
--  [README.md]()                    # Main instructions for running all folders/files
--  [hf-upload /]()                  # Gradio API specifically made for Hugging Face deployment
-     - [DOCKER]()                   # Containerizing the gradio api
-     - [gradio_app.py]()               # gradio UI and routing logic
-     - [label_encoder.pkl]()           # sklearn file that turns text to numeric values  **NOTE: Replace this file after building own model**
-     - [ml_model.py]()                 # connects and runs the machine learning model on Hugging Face                
+     -  [label_encoder.pkl](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/ml-api/label_encoder.pkl)       # sklearn file that turns text to numeric values  **NOTE: Replace this file after building own model**
+     -  [ml_model.py](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/ml-api/ml_model.py)             # connects and runs the machine learning model locally
+     -  [roberta_model/]             # Machine Learning folder **NOTE: This file is not in the repository and will not be added, one must create their own to run locally**
+        - [config.json]           # model configuration that handle how to run tokens
+        - [tokenizer.json]        # creates tokens
+        - [vocab.json]           # contains list and words inside token with unique identifiers
+        - [model.safetensors]     # preserves model weights
+-  [data/](https://github.com/mrterranova/ABC-Tag-Generator/tree/main/data)                       # SQLite database folder
+     -  [books.sqlite](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/data/books.sqlite)              # table structure
+     -  [database.js](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/data/database.js)               # database creation and execution file
+-  [server.js](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/server.js)                    # Express backend, contains centralized apis and call to machine learning api
+-  [seed.js](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/seed.js)                      # Database seeding script to seed database
+-  [package.json](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/package.json)                 # Backend dependencies & scripts for running the server and run react simultaneously
+-  [README.md](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/README.md)                    # Main instructions for running all folders/files
+-  [hf-upload /](https://github.com/mrterranova/ABC-Tag-Generator/tree/main/hf-upload)                  # Gradio API specifically made for Hugging Face deployment
+     - [DOCKER](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/hf-upload/Dockerfile)                   # Containerizing the gradio api
+     - [gradio_app.py](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/hf-upload/gradio_app.py)               # gradio UI and routing logic
+     - [label_encoder.pkl]           # sklearn file that turns text to numeric values  **NOTE: Add this file after building own model**
+     - [ml_model.py](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/hf-upload/ml_model.py)                 # connects and runs the machine learning model on Hugging Face
+-  [ machine-learning-project/](https://github.com/mrterranova/ABC-Tag-Generator/tree/main/machine-learning-project)                  # How to build/replicate my machine learning model from beginning to end
+-  [website-tour /](https://github.com/mrterranova/ABC-Tag-Generator/blob/main/website-tour/TOURPAGE.md)                  # Presentation tour of my website        
 
 ## Clone & Install
 
