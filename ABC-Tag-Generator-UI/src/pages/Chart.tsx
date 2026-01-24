@@ -8,7 +8,7 @@ interface ChartState {
   title: string;
   author: string;
   description: string;
-  category: string;
+  usrCategory: string;
   mlCategory: string;
   scores: number[];
 }
@@ -21,7 +21,7 @@ const Chart: React.FC = () => {
     return <p>No chart data available.</p>;
   }
 
-  const { title, author, description, scores, mlCategory, category } = state;
+  const { title, author, description, scores, mlCategory, usrCategory } = state;
   const displayScores = positiveLogTransform(scores);
 
   return (
@@ -54,7 +54,7 @@ const Chart: React.FC = () => {
         </div>
       </div>
     </div>
-    <div className="analysis-container"><h2 >Description Used for Analysis:</h2>{description} <p><b>Top User Category Preference:</b> <i>{category}</i> vs. <b>Machine Learning Preference:</b> <i>{mlCategory}</i></p> </div>
+    <div className="analysis-container"><h2 >Description Used for Analysis:</h2>{description} <p><b>Top User Category Preference:</b> <i>{usrCategory}</i> vs. <b>Machine Learning Preference:</b> <i>{mlCategory}</i></p> </div>
     </>
   );
 };
