@@ -5,49 +5,19 @@ Welcome to the guided tour of the **ABC Generator** website. Below are walkthrou
 ---
 
 ## Introduction
-<video width="600" controls>
-  <source src="videos/1_Intro.mp4?raw=true" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+[Watch 1_Intro.mp4](videos/1_Intro.mp4?raw=true)
 
----
+## Categorize Items
+[Watch 2_Categorize.mp4](videos/2_Categorize.mp4?raw=true)
 
-## Categorize Books
-<video width="600" controls>
-  <source src="videos/2_Categorize.mp4?raw=true" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+## View Chart
+[Watch 3_ViewChart.mp4](videos/3_ViewChart.mp4?raw=true)
 
----
-
-## View Book Prediction Chart
-<video width="600" controls>
-  <source src="videos/3_ViewChart.mp4?raw=true" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
----
-
-## Search Book Functionality
-<video width="600" controls>
-  <source src="videos/4_Seach.mp4?raw=true" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
----
+## Search Function
+[Watch 4_Seach.mp4](videos/4_Seach.mp4?raw=true)
 
 ## Report & Next Steps
-<video width="600" controls>
-  <source src="videos/5_Report_nextsteps.mp4?raw=true" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
----
+[Watch 5_Report_nextsteps.mp4](videos/5_Report_nextsteps.mp4?raw=true)
 
 ## README Finale
-<video width="600" controls>
-  <source src="videos/6_Readme_finale.mp4?raw=true" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
----
+[Watch 6_Readme_finale.mp4](videos/6_Readme_finale.mp4?raw=true)
